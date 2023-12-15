@@ -1,4 +1,4 @@
-# This is an engine to score stuff
-roobeer yeah roobeer
+# CSEC Club Scoring Engine
 
-![image](https://github.com/LTSEC/scoring-engine/assets/145503050/633929e6-b5a1-4aaa-943f-9d3bfba020e9)
+## Purpose
+The purpose of this scoring engine is to emulate a competition's scoring system
