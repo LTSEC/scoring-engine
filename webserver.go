@@ -1,54 +1,50 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
-	"io"
 	"log"
 	"net/http"
 	"os"
-	"strings"
-
-	"github.com/microcosm-cc/bluemonday"
 )
 
-func OnPage(link string) string {
+var site_infos = make(map[string][]byte)
+
+func Startup(dir string) {
+	items, _ := os.ReadDir(dir)
+	for _, item := range items {
+		content, err := os.ReadFile(dir + "/" + item.Name())
+		if err != nil {
+			log.Fatal(err)
+		}
+		site_infos[item.Name()] = content
+	}
+}
+
+func OnPage(link string) []byte {
+	var buf bytes.Buffer
 	// get HTML data from the website
 	res, err := http.Get(link)
 	if err != nil {
 		log.Fatal(err)
 	}
-	// read that data
-	content, err := io.ReadAll(res.Body)
-	res.Body.Close()
-	if err != nil {
-		log.Fatal(err)
-	}
-	// Sanitize the HTML
-	p := bluemonday.StripTagsPolicy()
-	html := p.Sanitize(string(content))
 
-	return strings.Replace(string(html), " ", "", -1)
-}
-
-func GetTemplate(directory string) string {
-	dat, err := os.ReadFile(directory)
-	if err != nil {
+	if err := res.Write(&buf); err != nil {
 		log.Fatal(err)
 	}
 
-	// Sanitize the HTML
-	p := bluemonday.StripTagsPolicy()
-	html := p.Sanitize(string(dat))
-
-	return strings.Replace(string(html), " ", "", -1)
+	return buf.Bytes()
 }
 
 func main() {
 
-	dir := "C:/Users/Aidan Feess/Documents/Projects/LTSEC/scoring-engine/cern_info.html"
+	dir := "C:/Users/Aidan Feess/Documents/Projects/LTSEC/scoring-engine/site_infos"
+	Startup(dir)
 
 	actual := OnPage("https://info.cern.ch/")
-	expected := GetTemplate(dir)
+	bytes.Compare(site_infos["cern_info.html"], actual)
 
-	fmt.Println(expected == actual)
+	fmt.Println(site_infos["cern_info.html"])
+	fmt.Println(actual)
+
 }
