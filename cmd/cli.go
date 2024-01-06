@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func main() {
+func Cli() {
 
 	var userInput string
 
