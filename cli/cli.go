@@ -1,4 +1,4 @@
-package main
+package cli
 
 import (
 	"bufio"
@@ -24,7 +24,6 @@ func Cli() {
 		userArgs := tokenizer(userInput)
 		fmt.Println(userArgs)
 	}
-
 }
 
 func inputParser() string {
