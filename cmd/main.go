@@ -20,7 +20,8 @@ func main() {
 	// Routes
 	e.GET("/", web.Root)
 
+	go cli.Cli()
+
 	// Start server
 	e.Logger.Fatal(e.Start(":8080"))
-	cli.Cli()
 }
