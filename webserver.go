@@ -51,7 +51,7 @@ func OnPage(link string) []byte {
 	return res_body
 }
 
-func main() {
+func Main() {
 
 	/// TODO: get directory base on user parameters in console when calling the file
 	/// files will need to be named according to each team
