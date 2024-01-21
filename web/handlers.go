@@ -2,11 +2,11 @@
 package web
 
 import (
-	"html/template"
 	"net/http"
+	"github.com/labstack/echo/v4"
 )
 
-func Root(w http.ResponseWriter, resp *http.Request) {
-    tmpl := template.Must(template.ParseFiles("./static/index.html"))
-    tmpl.Execute(w, nil)
+// Handler
+func Root(c echo.Context) error {
+	return c.String(http.StatusOK, "Hello, World!")
 }
