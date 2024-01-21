@@ -11,9 +11,6 @@ import (
 )
 
 var site_infos = make(map[int][]byte)
-var site_ips = []string{
-	"https://info.cern.ch/",
-}
 
 func Startup(dir string) { // Run on startup to read the site htmls to memory for comparison later
 	// Get the directory of the real HTML
@@ -51,11 +48,10 @@ func OnPage(link string) []byte {
 	return res_body
 }
 
-func main() {
+func CheckWeb(dir string, site_ips []string) {
 
 	/// TODO: get directory base on user parameters in console when calling the file
 	/// files will need to be named according to each team
-	dir := "E:/Projects/scoring-engine/site_infos"
 	Startup(dir)
 
 	/// TODO: get each website somehow
