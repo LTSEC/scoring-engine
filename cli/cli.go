@@ -71,12 +71,20 @@ func bashInjection(command []string) {
 
 	// run command guy with exec
 	// the .. thing lets you pass a slice as if it were a hard-coded , separated list
-	cmd := exec.Command(command[0], command[1:]...)
-	// force the output of cmd to be regular stdout
-	cmd.Stdout = os.Stdout
+	if command[0] != "cd" {
+		cmd := exec.Command(command[0], command[1:]...)
+		// force the output of cmd to be regular stdout
+		cmd.Stdout = os.Stdout
 
-	// check for error and print
-	if err := cmd.Run(); err != nil {
-		fmt.Println("couldn't run the guy", err)
+		// check for error and print
+		if err := cmd.Run(); err != nil {
+			fmt.Println("couldn't run the guy", err)
+		}
+	} else {
+		if len(command) == 2 {
+			os.Chdir(command[1])
+		} else {
+			fmt.Println("please include dir")
+		}
 	}
 }
