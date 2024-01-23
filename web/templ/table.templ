@@ -1,0 +1,26 @@
+package main
+
+templ table(teams []string, services []string, up bool) {
+    <head>
+    <style>
+    table, th, td {
+        border:1px solid black;
+        font-size: 40px;
+    }
+    </style>
+    
+    <table>
+        <tr>
+            <th>{ }</th>
+            for _, service := range services {
+                <th>{ service }</th>
+            }
+        </tr>
+        <tr>
+            for _, team := range teams {
+                <td>{ team }</td>
+            }
+        </tr>
+    </table>
+    </head>
+}

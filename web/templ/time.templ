@@ -1,0 +1,18 @@
+package main
+
+import "time"
+
+templ timeComponent(d time.Time) {
+	<body>
+	<script>
+	setTimeout(function(){
+   	window.location.reload(1);
+		}, 5000);
+	</script>
+	<div>{ d.String() }</div>
+	</body>
+}
+
+templ notFoundComponent() {
+	<div>404 - Not found</div>
+}
