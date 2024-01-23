@@ -1,0 +1,1 @@
+/Users/Dan/go/bin/templ generate
