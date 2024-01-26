@@ -12,7 +12,8 @@ import (
 
 var site_infos = make(map[int][]byte)
 
-func Startup(dir string) { // Run on startup to read the site htmls to memory for comparison later
+// Runs on startup of the web server checker to read the html of each site into memory
+func startup(dir string) {
 	// Get the directory of the real HTML
 	items, _ := os.ReadDir(dir)
 	iter := 0
@@ -28,7 +29,8 @@ func Startup(dir string) { // Run on startup to read the site htmls to memory fo
 	}
 }
 
-func OnPage(link string) []byte {
+// Returns the HTML data on the given website, takes a link as an input and returns a byte array
+func onPage(link string) []byte {
 	// Get HTML data from the website
 	res, err := http.Get(link)
 
@@ -48,19 +50,12 @@ func OnPage(link string) []byte {
 	return res_body
 }
 
+// Iterates through the websites provided and returns a list of booleans indicating which websites are up and which are down
 func CheckWeb(dir string, site_ips []string) {
 
-	/// TODO: get directory base on user parameters in console when calling the file
-	/// files will need to be named according to each team
+	// Untested
+	return_sites = []bool
 	Startup(dir)
-
-	/// TODO: get each website somehow
-	// 	actual := OnPage("https://info.cern.ch/")
-
-	/// TODO: do this for every site in site_infos
-	// webserv_up := bytes.Equal(site_infos["cern_info.html"], actual)
-	// fmt.Println(webserv_up)
-
 	for i := 0; i < len(site_ips); i++ {
 
 		pagehtml := bytes.TrimSuffix(OnPage(site_ips[i]), []byte{10})        // Trim byte 10 (eof) from end of file
@@ -70,8 +65,10 @@ func CheckWeb(dir string, site_ips []string) {
 		fmt.Println(bytes.TrimSpace(site_info))
 
 		webserv_up := bytes.Equal(bytes.TrimSpace(site_info), bytes.TrimSpace(pagehtml))
-		fmt.Println(webserv_up)
-
+		// Untested
+		return_sites = append(return_sites, webserv_up)
 	}
 
+	// Untested
+	return return_sites
 }
