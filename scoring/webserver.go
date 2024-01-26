@@ -12,7 +12,7 @@ import (
 
 var site_infos = make(map[int][]byte)
 
-// Runs on startup of the web server checker to read the html of each site into memory
+// Runs on startup of the web server checker to read the html of each site into memory.
 func startup(dir string) {
 	// Get the directory of the real HTML
 	items, _ := os.ReadDir(dir)
@@ -29,7 +29,7 @@ func startup(dir string) {
 	}
 }
 
-// Returns the HTML data on the given website, takes a link as an input and returns a byte array
+// Returns the HTML data on the given website, takes a link as an input and returns a byte array.
 func onPage(link string) []byte {
 	// Get HTML data from the website
 	res, err := http.Get(link)
@@ -50,7 +50,7 @@ func onPage(link string) []byte {
 	return res_body
 }
 
-// Iterates through the websites provided and returns a list of booleans indicating which websites are up and which are down
+// Iterates through the websites provided and returns a list of booleans indicating which websites are up and which are down.
 func CheckWeb(dir string, site_ips []string) {
 
 	// Untested
