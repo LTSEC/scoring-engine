@@ -23,5 +23,8 @@ func main() {
 	go cli.Cli()
 
 	// Start server
-	e.Logger.Fatal(e.Start(":8080"))
+	go e.Logger.Fatal(e.Start(":8080"))
+
+	// start the db
+	go score_holder.Startup()
 }
