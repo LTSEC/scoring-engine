@@ -51,24 +51,21 @@ func onPage(link string) []byte {
 }
 
 // Iterates through the websites provided and returns a list of booleans indicating which websites are up and which are down.
-func CheckWeb(dir string, site_ips []string) {
+func CheckWeb(dir string, site_ips []string) []bool {
 
-	// Untested
-	return_sites = []bool
-	Startup(dir)
+	var return_sites []bool
+	startup(dir)
 	for i := 0; i < len(site_ips); i++ {
 
-		pagehtml := bytes.TrimSuffix(OnPage(site_ips[i]), []byte{10})        // Trim byte 10 (eof) from end of file
+		pagehtml := bytes.TrimSuffix(onPage(site_ips[i]), []byte{10})        // Trim byte 10 (eof) from end of file
 		site_info := bytes.ReplaceAll(site_infos[i], []byte{13}, []byte{10}) // Exchange byte 13 for byte 10 (im not sure why eof is at the end of every line)
 
 		fmt.Println(bytes.TrimSpace(pagehtml))
 		fmt.Println(bytes.TrimSpace(site_info))
 
 		webserv_up := bytes.Equal(bytes.TrimSpace(site_info), bytes.TrimSpace(pagehtml))
-		// Untested
 		return_sites = append(return_sites, webserv_up)
 	}
 
-	// Untested
 	return return_sites
 }
