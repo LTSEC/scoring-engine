@@ -17,6 +17,8 @@ func main() {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
+	tests.ftp_test()
+
 	// Routes
 	e.GET("/", web.Root)
 
@@ -26,5 +28,5 @@ func main() {
 	go e.Logger.Fatal(e.Start(":8080"))
 
 	// start the db
-	go score_holder.Startup()
+	//go score_holder.Startup()
 }
