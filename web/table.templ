@@ -1,6 +1,6 @@
-package main
+package web
 
-templ table(teams []string, services []string, up bool) {
+templ Table(teams []string, services []string, up bool) {
     <head>
     <style>
     table, th, td {
@@ -16,11 +16,14 @@ templ table(teams []string, services []string, up bool) {
                 <th>{ service }</th>
             }
         </tr>
-        <tr>
-            for _, team := range teams {
+        for _, team := range teams {
+            <tr>
                 <td>{ team }</td>
-            }
-        </tr>
+                for i := 0; i < len(services); i++ {
+                    <td> { } </td>
+                }
+            </tr>
+        }   
     </table>
     </head>
 }

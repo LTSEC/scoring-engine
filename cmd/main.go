@@ -17,7 +17,7 @@ func main() {
 	e.Use(middleware.Recover())
 
 	// Routes
-	e.GET("/", web.Root)
+	e.GET("/", web.TableHandler)
 
 	// Start server
 	e.Logger.Fatal(e.Start(":8080"))
