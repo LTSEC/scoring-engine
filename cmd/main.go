@@ -26,5 +26,5 @@ func main() {
 	go e.Logger.Fatal(e.Start(":8080"))
 
 	// start the db
-	go score_holder.Startup()
+	//go score_holder.Startup()
 }
