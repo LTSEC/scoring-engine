@@ -1,9 +1,9 @@
 package web
 
-templ Table(teams []string, services []string, up bool) {
+templ Table(teams []string, services []string, state bool) {
     <head>
     <style>
-    table, th, td {
+    table, th, td, tr {
         border:1px solid black;
         font-size: 40px;
     }
@@ -20,7 +20,8 @@ templ Table(teams []string, services []string, up bool) {
             <tr>
                 <td>{ team }</td>
                 for i := 0; i < len(services); i++ {
-                    <td> { } </td>
+                //TODO - get templ to display images
+                    <td> <img src="/assets/up.png" alt="Green up arrow"> </td>
                 }
             </tr>
         }   

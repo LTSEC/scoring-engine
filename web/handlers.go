@@ -10,7 +10,7 @@ import (
 
 // Handler
 func TableHandler(c echo.Context) error {
-	services := []string{"ftp", "apache", "etc"}
+	services := []string{"ftp", "http", "etc."}
 	teams := []string{"team a", "team b", "team c"}
 	return render(c, Table(teams, services, true))
 }
