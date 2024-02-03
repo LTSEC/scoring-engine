@@ -17,8 +17,6 @@ func main() {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
-	tests.ftp_test()
-
 	// Routes
 	e.GET("/", web.Root)
 

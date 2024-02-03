@@ -9,31 +9,34 @@ import (
 
 // Connects to an IP address and returns a connection,
 // if it could connect
-func Connect(address string) error {
+func Connect(address string, username string, password string) (string, error) {
 	connection, err := ftp.Dial(address, ftp.DialWithTimeout(5*time.Second))
 	if err != nil {
-		return err
+		return "", err
 	}
 
-	err = connection.Login("anonymous", "anonymous")
+	err = connection.Login(username, password)
 	if err != nil {
-		return err
+		return "", err
 	}
 
-	result, err := connection.Retr("test-file.txt")
+	result, err := connection.Retr("textfile.txt")
 	if err != nil {
-		return err
+		return "", err
 	}
 	defer result.Close()
 
 	buf, err := io.ReadAll(result)
-	println(string(buf))
+
+	if err != nil {
+		return "", err
+	}
 
 	err = connection.Quit()
 
 	if err != nil {
-		return err
+		return "", err
 	}
 
-	return nil
+	return string(buf), nil
 }
