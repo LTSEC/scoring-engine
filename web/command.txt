@@ -1,1 +1,2 @@
-/Users/Dan/go/bin/templ generate
+/Users/Dan/go/bin/templ generate - desktop
+/Users/zheng/go/bin/templ generate - laptop

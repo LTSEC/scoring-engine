@@ -10,7 +10,7 @@ import "context"
 import "io"
 import "bytes"
 
-func Table(teams []string, services []string, up bool) templ.Component {
+func Table(teams []string, services []string, state bool) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -23,7 +23,7 @@ func Table(teams []string, services []string, up bool) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<head><style>\r\n    table, th, td {\r\n        border:1px solid black;\r\n        font-size: 40px;\r\n    }\r\n    </style><table><tr><th></th>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<head><style>\r\n    table, th, td, tr {\r\n        border:1px solid black;\r\n        font-size: 40px;\r\n    }\r\n    </style><table><tr><th></th>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -35,7 +35,7 @@ func Table(teams []string, services []string, up bool) templ.Component {
 			var templ_7745c5c3_Var2 string
 			templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(service)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `table.templ`, Line: 15, Col: 29}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web\table.templ`, Line: 15, Col: 29}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 			if templ_7745c5c3_Err != nil {
@@ -58,7 +58,7 @@ func Table(teams []string, services []string, up bool) templ.Component {
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(team)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `table.templ`, Line: 20, Col: 26}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web\table.templ`, Line: 20, Col: 26}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
