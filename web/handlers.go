@@ -10,7 +10,7 @@ import (
 
 // Handler
 func TableHandler(c echo.Context) error {
-	services := []string{"aidan", "loves", "vito mumphrey"}
+	services := []string{"ftp", "apache", "etc"}
 	teams := []string{"team a", "team b", "team c"}
 	return render(c, Table(teams, services, true))
 }
@@ -21,3 +21,5 @@ func render(ctx echo.Context, cmp templ.Component) error {
 
 //c.Response().Header().Set(echo.HeaderContentType, echo.MIMETextHTML)
 //	return cmp.Render(c.Request().Context(), c.Response().Writer)
+
+//Todo - arrows and scoring
