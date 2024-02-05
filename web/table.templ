@@ -22,7 +22,8 @@ templ Table(teams []string, services []string, state bool) {
             <tr>
                 <td>{ team }</td>
                 for i := 0; i < len(services); i++ {
-                    <td> @templ.Raw("<img src="assets/up.png" alt="Green up arrow">") </td>
+                //TODO - get templ to display images
+                    <td> <img src="/assets/up.png" alt="Green up arrow"/> </td>
                 }
             </tr>
         }   
