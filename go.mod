@@ -3,8 +3,8 @@ module github.com/LTSEC/scoring-engine
 go 1.21.5
 
 require (
-	github.com/jlaffaye/ftp v0.2.0
 	github.com/a-h/templ v0.2.543
+	github.com/jlaffaye/ftp v0.2.0
 	github.com/labstack/echo/v4 v4.11.3
 )
 
@@ -22,4 +22,5 @@ require (
 	golang.org/x/sys v0.16.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 	golang.org/x/time v0.3.0 // indirect
+	gopkg.in/yaml.v2 v2.4.0 // indirect
 )

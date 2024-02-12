@@ -1,0 +1,9 @@
+---
+webScore: 0
+webIP: "localhost"
+webDir: "/"
+
+ftpScore: 0
+ftpIP: "localhost"
+ftpUser: "root"
+ftpPass: "root"
