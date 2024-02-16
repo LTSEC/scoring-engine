@@ -1,6 +1,8 @@
 package web
 
 templ Table(teams []string, services []string, state bool) {
+    <!DOCTYPE html>
+    <html>
     <head>
     <style>
     table, th, td, tr {
@@ -20,11 +22,11 @@ templ Table(teams []string, services []string, state bool) {
             <tr>
                 <td>{ team }</td>
                 for i := 0; i < len(services); i++ {
-                //TODO - get templ to display images
-                    <td> <img src="/assets/up.png" alt="Green up arrow"> </td>
+                    <td> @templ.Raw("<img src="assets/up.png" alt="Green up arrow">") </td>
                 }
             </tr>
         }   
     </table>
     </head>
+    </html>
 }
