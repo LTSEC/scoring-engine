@@ -31,7 +31,7 @@ test:
 	go test -v
 
 docs:
-	godoc 
+	godoc -http=:6060
 
 # test-cov-html:
 # 	go test -coverprofile=coverage.out
