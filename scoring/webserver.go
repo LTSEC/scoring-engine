@@ -12,6 +12,7 @@ import (
 var site_infos = make(map[int][]byte)
 
 // Runs on startup of the web server checker to read the html of each site into memory.
+// Takes a string which represents the directory that will be read from
 func web_startup(dir string) error {
 	// Get the directory of the real HTML
 	items, _ := os.ReadDir(dir)
@@ -52,6 +53,7 @@ func onPage(link string) ([]byte, error) {
 }
 
 // Iterates through the websites provided and returns a list of booleans indicating which websites are up and which are down.
+// Takes in a directory and list of strings which are ip addresses
 func CheckWeb(dir string, site_ips []string) ([]bool, error) {
 
 	var return_sites []bool
