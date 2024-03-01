@@ -9,7 +9,7 @@ ALL = linux-amd64
 
 bin:
 	templ generate ./web/*.templ
-	go build -ldflags "$(LDFLAGS)"
+	go build -ldflags "$(LDFLAGS)" ./cmd/main.go
 
 build:
 	mkdir -p bin/
