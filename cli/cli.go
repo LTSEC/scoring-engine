@@ -61,6 +61,8 @@ func commandSelector(tokenizedInput []string) {
 	case "hello":
 		fmt.Println("it was hello!")
 	// default case to pipe into bash
+	case "help":
+		fmt.Println("Available commands: hello (testing output), exit (exits the CLI)\nAll other commands will be passed to bash.")
 	default:
 		bashInjection(tokenizedInput)
 	}
