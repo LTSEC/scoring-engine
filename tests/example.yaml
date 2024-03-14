@@ -5,5 +5,13 @@ webDir: "/"
 
 ftpScore: 0
 ftpIP: "localhost"
-ftpUser: "root"
-ftpPass: "root"
+ftpCreds:
+  user1 : pass1
+  user2 : pass2
+  user3 : pass3
+
+teamScores: 
+  team1 : 0
+  team2 : 0
+  team3 : 0
+  team4 : 0

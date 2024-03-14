@@ -13,10 +13,11 @@ type Test struct {
 	WebIP    string `yaml:"webIP"`
 	WebDir   string `yaml:"webDir"`
 
-	FtpScore int    `yaml:"ftpScore"`
-	FtpIP    string `yaml:"ftpIP"`
-	FtpUser  string `yaml:"ftpUser"`
-	FtpPass  string `yaml:"ftpPass"`
+	FtpScore int               `yaml:"ftpScore"`
+	FtpIP    string            `yaml:"ftpIP"`
+	FtpCreds map[string]string `yaml:"ftpCreds"`
+
+	TeamScores map[string]int `yaml:"teamScores"`
 }
 
 func main() {
