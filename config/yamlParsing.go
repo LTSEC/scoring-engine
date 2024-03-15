@@ -18,6 +18,10 @@ type Test struct {
 	FtpCreds map[string]string `yaml:"ftpCreds"`
 
 	TeamScores map[string]int `yaml:"teamScores"`
+
+	SshIP    string            `yaml:"sshIP"`
+	PortNum  int               `yaml:"portNum"`
+	SshCreds map[string]string `yaml:"sshCreds"`
 }
 
 func main() {

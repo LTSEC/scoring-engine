@@ -15,3 +15,10 @@ teamScores:
   team2 : 0
   team3 : 0
   team4 : 0
+
+sshIP: "localhost"
+portNum: 22
+sshCreds:
+  user1 : pass1
+  user2 : pass2
+  user3 : pass3
