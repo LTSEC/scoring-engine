@@ -4,6 +4,7 @@ import (
 	"golang.org/x/crypto/ssh"
 )
 
+// Attempts a connection via ssh and returns a boolean value representing success
 func SSHConnect(hostname string, port string, username string, password string) (bool, error) {
 
 	host := hostname + ":" + port

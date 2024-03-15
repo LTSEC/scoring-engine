@@ -1,10 +1,5 @@
 package logging
 
-import (
-
-    "log"
-)
-
 func createLogFile() {
 
 }
