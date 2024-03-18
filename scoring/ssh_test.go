@@ -1,7 +1,6 @@
 package scoring
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -13,5 +12,5 @@ func TestSSH(t *testing.T) {
 	//	log.Fatal(err)
 	//}
 
-	fmt.Println(SSHConnect("172.29.1.5", "22", "testuser", "testpass"))
+	t.Log(SSHConnect("172.29.1.5", "22", "testuser", "testpass"))
 }
