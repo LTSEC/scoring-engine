@@ -3,9 +3,11 @@ package scoring
 import (
 	"bytes"
 	"io"
+	"net"
 	"net/http"
 	"os"
 	"strings"
+	"time"
 )
 
 var site_info []byte
@@ -24,7 +26,14 @@ func web_startup(dir string) error {
 }
 
 // Returns the HTML data on the given website, takes a link as an input and returns a byte array.
-func onPage(link string) ([]byte, error) {
+func onPage(link string, ip string) ([]byte, error) {
+	// First dial the website to ensure its even alive
+	_, err := net.DialTimeout("tcp", ip, 150*time.Millisecond)
+
+	if err != nil {
+		return make([]byte, 0), err
+	}
+
 	// Get HTML data from the website
 	res, err := http.Get(link)
 
@@ -44,8 +53,7 @@ func onPage(link string) ([]byte, error) {
 	return res_body, nil
 }
 
-// Iterates through the websites provided and returns a list of booleans indicating which websites are up and which are down.
-// Takes in a directory and list of strings which are ip addresses
+// Dials website directly for speed then tries to download and compare website HTMLs if successful
 func CheckWeb(dir string, ip string) (bool, error) {
 
 	err := web_startup(dir)
@@ -53,7 +61,7 @@ func CheckWeb(dir string, ip string) (bool, error) {
 		return false, err
 	}
 
-	pagehtml, err := onPage("http://" + ip)
+	pagehtml, err := onPage("http://"+ip, ip+":80")
 	if err != nil {
 		return false, err
 	}

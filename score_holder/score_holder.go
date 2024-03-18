@@ -1,7 +1,5 @@
 package score_holder
 
-import "fmt"
-
 type Map map[string]interface{}
 type ScoreMap = []map[string]map[string]interface{}
 
@@ -38,17 +36,20 @@ func NewStateMap(ftp bool, http bool, ssh bool) Map {
 func UpdateTeam(TeamIndex int, scores Map, states Map) error {
 	if scores != nil {
 		for scoretype, score := range AllTeams[TeamIndex]["scores"] {
-			add_score, ok := scores[scoretype].(int)
-			if ok != true {
-				fmt.Println(ok)
-			}
-			old_score, ok := score.(int)
-			if ok != true {
-				fmt.Println(ok)
-			}
-
+			add_score := scores[scoretype].(int)
+			old_score := score.(int)
 			AllTeams[TeamIndex]["scores"][scoretype] = add_score + old_score
 		}
+	}
+	if states != nil {
+		AllTeams[TeamIndex]["states"] = states
+	}
+	return nil
+}
+
+func SetTeam(TeamIndex int, scores Map, states Map) error {
+	if scores != nil {
+		AllTeams[TeamIndex]["scores"] = scores
 	}
 	if states != nil {
 		AllTeams[TeamIndex]["states"] = states
