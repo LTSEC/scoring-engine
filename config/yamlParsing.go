@@ -1,14 +1,13 @@
-package main
+package config
 
 import (
-	"fmt"
 	"log"
 	"os"
 
-    "github.com/go-yaml/yaml"
+	"github.com/go-yaml/yaml"
 )
 
-type Test struct {
+type Yaml struct {
 	WebScore int    `yaml:"webscore"`
 	WebIP    string `yaml:"webIP"`
 	WebDir   string `yaml:"webDir"`
@@ -24,7 +23,7 @@ type Test struct {
 	SshCreds map[string]string `yaml:"sshCreds"`
 }
 
-func main() {
+func Parse() Yaml {
 
 	var yamlPath = "../tests/example.yaml"
 
@@ -33,11 +32,11 @@ func main() {
 		log.Fatal(err)
 	}
 
-	var me Test
+	var config Yaml
 
-	if err := yaml.Unmarshal(file, &me); err != nil {
+	if err := yaml.Unmarshal(file, &config); err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("%+v\n", me)
+	return config
 }

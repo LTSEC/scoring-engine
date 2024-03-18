@@ -6,11 +6,15 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+
+	"github.com/LTSEC/scoring-engine/config"
 )
 
 func Cli() {
 
 	var userInput string
+
+	config := config.Parse()
 
 	for {
 		var currDirectory, err = os.Getwd()
@@ -28,7 +32,7 @@ func Cli() {
 		}
 		userArgs := tokenizer(userInput)
 
-		commandSelector(userArgs)
+		commandSelector(userArgs, &config)
 	}
 }
 
@@ -52,7 +56,7 @@ func tokenizer(userInput string) []string {
 }
 
 // switch statement for command selection
-func commandSelector(tokenizedInput []string) {
+func commandSelector(tokenizedInput []string, config *config.Yaml) {
 
 	// the switch acts on the first word of the command
 	// the idea is that you'd pass the remaining args to the requisit functions
@@ -62,7 +66,9 @@ func commandSelector(tokenizedInput []string) {
 		fmt.Println("it was hello!")
 	// default case to pipe into bash
 	case "help":
-		fmt.Println("Available commands: hello (testing output), exit (exits the CLI)\nAll other commands will be passed to bash.")
+		fmt.Println("Available commands:\nhello (testing output)\nconfig (prints current yaml config)\nexit (exits the CLI)\nAll other commands will be passed to bash.")
+	case "config":
+		fmt.Printf("%+v\n", config)
 	default:
 		bashInjection(tokenizedInput)
 	}
