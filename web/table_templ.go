@@ -23,7 +23,7 @@ func Table(teams []string, services []string, state bool) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<head><style>\r\n    table, th, td, tr {\r\n        border:1px solid black;\r\n        font-size: 40px;\r\n    }\r\n    </style><table><tr><th></th>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<head><body><script> src=\"https://unpkg.com/htmx.org@1.9.11\" integrity=\"sha384-0gxUXCCR8yv9FM2b+U3FDbsKthCI66oH5IA9fHppQq9DDMHuMauqq1ZHBpJxQ0J0\" crossorigin=\"anonymous\"> </script><style>\r\n    table, th, td, tr {\r\n        border:1px solid black;\r\n        font-size: 40px;\r\n    }\r\n    </style><table><tr><th></th>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -35,7 +35,7 @@ func Table(teams []string, services []string, state bool) templ.Component {
 			var templ_7745c5c3_Var2 string
 			templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(service)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web\table.templ`, Line: 15, Col: 29}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web\table.templ`, Line: 17, Col: 29}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 			if templ_7745c5c3_Err != nil {
@@ -58,7 +58,7 @@ func Table(teams []string, services []string, state bool) templ.Component {
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(team)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web\table.templ`, Line: 20, Col: 26}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web\table.templ`, Line: 22, Col: 26}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
@@ -69,7 +69,7 @@ func Table(teams []string, services []string, state bool) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			for i := 0; i < len(services); i++ {
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" <td><img src=\"/assets/up.png\" alt=\"Green up arrow\"></td>")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" <td><img src=\"/assets/up.png\" alt=\"up.png\"></td>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -79,7 +79,7 @@ func Table(teams []string, services []string, state bool) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</table></head>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</table><button hx-post=\"/clicked\" hx-swap=\"outerHTML\">Click Me\r</button></body></head>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
