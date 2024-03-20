@@ -4,6 +4,8 @@ templ Table(teams []string, services []string, state bool) {
     <!DOCTYPE html>
     <html>
     <head>
+    <body>
+    <script> src="https://unpkg.com/htmx.org@1.9.11" integrity="sha384-0gxUXCCR8yv9FM2b+U3FDbsKthCI66oH5IA9fHppQq9DDMHuMauqq1ZHBpJxQ0J0" crossorigin="anonymous"> </script>
     <style>
     table, th, td, tr {
         border:1px solid black;
@@ -23,11 +25,15 @@ templ Table(teams []string, services []string, state bool) {
                 <td>{ team }</td>
                 for i := 0; i < len(services); i++ {
                 //TODO - get templ to display images
-                    <td> <img src="/web/assets/up.png" alt="Green up arrow"/> </td>
+                    <td> <img src="/assets/up.png" alt="up.png"/> </td>
                 }
             </tr>
         }   
     </table>
+    <button hx-post="/clicked" hx-swap="outerHTML">
+        Test button
+    </button>
+    </body>
     </head>
     </html>
 }
