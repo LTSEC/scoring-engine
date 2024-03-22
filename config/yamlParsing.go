@@ -1,12 +1,14 @@
 package config
 
 import (
-	"log"
+	"fmt"
 	"os"
 
 	"github.com/go-yaml/yaml"
 )
 
+// The Yaml type is meant to store the data from a configuration yaml.
+// This struct needs to be updated any time there is new information meant to be brought in through the yaml.
 type Yaml struct {
 	WebScore int    `yaml:"webscore"`
 	WebIP    string `yaml:"webIP"`
@@ -23,19 +25,22 @@ type Yaml struct {
 	SshCreds map[string]string `yaml:"sshCreds"`
 }
 
+// Parse uses the go-yaml library in order to take information out of a .yaml config file and place into a Yaml struct.
+// This is accomplished by opening the .yaml file and then using yaml.Unmarshal in order to import the information from the yaml.
+// Parse then returns the struct.
 func Parse() Yaml {
 
 	var yamlPath = "../tests/example.yaml"
 
 	file, err := os.ReadFile(yamlPath)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println("Failed to open the file: ", err)
 	}
 
 	var config Yaml
 
 	if err := yaml.Unmarshal(file, &config); err != nil {
-		log.Fatal(err)
+		fmt.Println("Failed to unmarshal the .yaml: ", err)
 	}
 
 	return config

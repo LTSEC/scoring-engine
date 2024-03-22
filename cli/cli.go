@@ -10,6 +10,13 @@ import (
 	"github.com/LTSEC/scoring-engine/config"
 )
 
+// The CLI takes in user input from stdin to execute predetermined commands.
+// This is intended to be the primary method of control for the scoring engine.
+//
+// Any input is tokenized into a slice, of which the first word is meant to act as the command.
+// The subsequent inputs are meant to be passed to a later function that is called by the command if applicable.
+//
+// If input does not match any commands for the engine, then the entire command is passed into bash for handling.
 func Cli() {
 
 	var userInput string
