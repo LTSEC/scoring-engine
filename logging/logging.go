@@ -1,3 +1,5 @@
+// These methods should be used ONLY in the main process
+
 package logging
 
 import (
@@ -9,73 +11,73 @@ import (
 )
 
 var (
-	file        *os.File
-	mutex       sync.Mutex
-	initialized bool
-
-	// Loggers
-	infoLogger    *log.Logger
-	warningLogger *log.Logger
-	errorLogger   *log.Logger
+	initialized    bool
+	logFile        *os.File
+	logger         *log.Logger
+	logCh          chan string
+	doneCh         chan bool
+	semaphore      sync.WaitGroup
+	activeMessages sync.WaitGroup
+	/* ctx    context.Context
+	cancel context.CancelFunc */
 )
 
-// CreateLogFile prepares the logging environment by creating a log file based on the current date and time.
+// USE: Make sure this function is called BEFORE any other functions are called in your program
+// WHAT: Creates a txt file, channels to communicate with other routines, and the logger struct
 func CreateLogFile() {
-	now := time.Now()
-	fileName := now.Format("2006-01-02_15-04-05") + " Log.txt"
+	if initialized {
+		return
+	}
+	initialized = true
+	filePath := "C:/Users/bobby/OneDrive/Desktop/testing conc/Logs" // <- Change this later
 	var err error
-	file, err = os.Create(fileName)
+	filename := filePath + "/Log " + time.Now().Format("2006-01-02 15-04-05") + ".txt"
+	logFile, err = os.Create(filename)
 	if err != nil {
-		log.Printf("Failed to create log file: %v", err)
+		fmt.Println("Failed to open log file")
 		return
 	}
-	SetLogFile(file) // Pass the file descriptor directly.
+	logCh = make(chan string, 100) // Buffered channel for storing log messages
+	doneCh = make(chan bool)       // Channel to signal done (to tell it to stop logging)
+	logger = log.New(logFile, "INFO: ", log.Ldate|log.Ltime)
 }
 
-// SetLogFile configures the logging mechanism to output to a specified file.
-func SetLogFile(f *os.File) {
-	mutex.Lock()
-	defer mutex.Unlock()
-
-	if file != nil {
-		file.Close() // Ensure the previously opened file is closed before reassignment.
-	}
-
-	file = f // Assign the new file descriptor.
-
-	// Initialize loggers with the new file.
-	infoLogger = log.New(file, "INFO: ", log.Ldate|log.Ltime|log.Lshortfile)
-	warningLogger = log.New(file, "WARNING: ", log.Ldate|log.Ltime|log.Lshortfile)
-	errorLogger = log.New(file, "ERROR: ", log.Ldate|log.Ltime|log.Lshortfile)
-
-	initialized = true // Mark the logging system as initialized.
-}
-
-// LogMessage allows logging a message with a specified severity.
-func LogMessage(severity, message string) {
+// USE: Has to always follow CreateLogFile.
+// HOW: Spawns another routine which listens to and logs anything on the message chanel
+func StartLog() {
 	if !initialized {
-		fmt.Println("Logging system not initialized")
 		return
 	}
-
-	mutex.Lock()
-	defer mutex.Unlock()
-
-	switch severity {
-	case "info":
-		infoLogger.Println(message)
-	case "warning":
-		warningLogger.Println(message)
-	case "error":
-		errorLogger.Println(message)
-	default:
-		fmt.Println("Invalid severity specified:", severity)
-	}
+	semaphore.Add(1)
+	go func() {
+		defer semaphore.Done()
+		for {
+			select {
+			case msg := <-logCh:
+				if logFile != nil {
+					logger.Println(msg) // Write directly to the file
+					activeMessages.Done()
+				}
+			case <-doneCh:
+				return
+			}
+		}
+	}()
 }
 
-// StopLog should be called to close the log file before the application exits.
+// USE: When you're done logging (should be called after all routines are finished)
+// HOW: Closes doneCh which signals StartLog to finish and then closes the file
 func StopLog() {
-	if file != nil {
-		file.Close()
+	if !initialized {
+		return
+	}
+	activeMessages.Wait()
+	close(doneCh)    // Signal to StartLog to stop taking any more information
+	semaphore.Wait() // Wait for the logging goroutine to finish
+	if logFile != nil {
+		err := logFile.Close()
+		if err != nil {
+			fmt.Println("Failed to close log file")
+		}
 	}
 }
