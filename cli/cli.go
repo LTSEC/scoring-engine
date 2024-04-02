@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/LTSEC/scoring-engine/config"
+	"github.com/LTSEC/scoring-engine/scoring"
 )
 
 var yamlConfig config.Yaml
@@ -81,7 +82,10 @@ func commandSelector(tokenizedInput []string) {
 		} else {
 			yamlConfig = config.Parse(tokenizedInput[1])
 		}
+	case "checkconfig":
 		fmt.Printf("%+v\n", yamlConfig)
+	case "score":
+		scoring.Scoring()
 	default:
 		bashInjection(tokenizedInput)
 	}
