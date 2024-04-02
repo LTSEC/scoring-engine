@@ -1,9 +1,13 @@
-FROM alpine:latest
+FROM alpine:edge
 
-RUN "apk update && apk add go git"
+WORKDIR ~
+RUN apk --no-cache add --upgrade go curl unzip
 
-RUN "git clone https://github.com/LTSEC/scoring-engine/release/tag/latest"
-RUN "go build ."
+RUN curl https://github.com/LTSEC/scoring-engine/archive/refs/heads/main.zip
 
-CMD [ "./main" ]
+RUN unzip "./main.zip"
+
+RUN go build .
+
+CMD [ "./scoring-engine" ]
 
