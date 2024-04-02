@@ -28,9 +28,9 @@ type Yaml struct {
 // Parse uses the go-yaml library in order to take information out of a .yaml config file and place into a Yaml struct.
 // This is accomplished by opening the .yaml file and then using yaml.Unmarshal in order to import the information from the yaml.
 // Parse then returns the struct.
-func Parse() Yaml {
+func Parse(path string) Yaml {
 
-	var yamlPath = "../tests/example.yaml"
+	var yamlPath = path
 
 	file, err := os.ReadFile(yamlPath)
 	if err != nil {

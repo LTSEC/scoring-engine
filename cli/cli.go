@@ -10,6 +10,8 @@ import (
 	"github.com/LTSEC/scoring-engine/config"
 )
 
+var yamlConfig config.Yaml
+
 // The CLI takes in user input from stdin to execute predetermined commands.
 // This is intended to be the primary method of control for the scoring engine.
 //
@@ -20,8 +22,6 @@ import (
 func Cli() {
 
 	var userInput string
-
-	config := config.Parse()
 
 	for {
 		var currDirectory, err = os.Getwd()
@@ -39,7 +39,7 @@ func Cli() {
 		}
 		userArgs := tokenizer(userInput)
 
-		commandSelector(userArgs, &config)
+		commandSelector(userArgs)
 	}
 }
 
@@ -63,7 +63,7 @@ func tokenizer(userInput string) []string {
 }
 
 // switch statement for command selection
-func commandSelector(tokenizedInput []string, config *config.Yaml) {
+func commandSelector(tokenizedInput []string) {
 
 	// the switch acts on the first word of the command
 	// the idea is that you'd pass the remaining args to the requisit functions
@@ -73,9 +73,15 @@ func commandSelector(tokenizedInput []string, config *config.Yaml) {
 		fmt.Println("it was hello!")
 	// default case to pipe into bash
 	case "help":
-		fmt.Println("Available commands:\nhello (testing output)\nconfig (prints current yaml config)\nexit (exits the CLI)\nAll other commands will be passed to bash.")
+		fmt.Println("Available commands:\nhello (testing output)\nconfig (takes in a path and pulls down/prints current yaml config)\nexit (exits the CLI)\nAll other commands will be passed to bash.")
 	case "config":
-		fmt.Printf("%+v\n", config)
+		if len(tokenizedInput) != 2 {
+			fmt.Println("config requires a path")
+			break
+		} else {
+			yamlConfig = config.Parse(tokenizedInput[1])
+		}
+		fmt.Printf("%+v\n", yamlConfig)
 	default:
 		bashInjection(tokenizedInput)
 	}
