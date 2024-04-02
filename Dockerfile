@@ -3,11 +3,13 @@ FROM alpine:edge
 WORKDIR ~
 RUN apk --no-cache add --upgrade go curl unzip
 
-RUN curl https://github.com/LTSEC/scoring-engine/archive/refs/heads/main.zip
+RUN curl -LJO https://github.com/LTSEC/scoring-engine/archive/refs/heads/main.zip
 
-RUN unzip "./main.zip"
+RUN unzip ./scoring-engine-main.zip
 
-RUN go build .
+WORKDIR ./scoring-engine-main
+RUN go build ./cmd/main.go
+RUN ls -l
 
-CMD [ "./scoring-engine" ]
+CMD [ "./scoring-engine-main/scoring-engine" ]
 
