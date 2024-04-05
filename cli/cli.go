@@ -78,7 +78,6 @@ func commandSelector(tokenizedInput []string) {
 	case "config":
 		if len(tokenizedInput) != 2 {
 			fmt.Println("config requires a path")
-			break
 		} else {
 			yamlConfig = config.Parse(tokenizedInput[1])
 		}
