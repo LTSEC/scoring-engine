@@ -19,8 +19,5 @@ func render(ctx echo.Context, cmp templ.Component) error {
 	return cmp.Render(ctx.Request().Context(), ctx.Response())
 }
 
-//c.Response().Header().Set(echo.HeaderContentType, echo.MIMETextHTML)
-//	return cmp.Render(c.Request().Context(), c.Response().Writer)
-
 //Todo - arrows and scoring
 // use a map, black box takes in state and score

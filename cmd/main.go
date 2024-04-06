@@ -16,11 +16,10 @@ func main() {
 	// Middleware
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
-	e.Use(middleware.Static("/web/assets"))
 
 	// Handling Static Files
 	e.Static("/assets", "web")
-
+	
 	// Routes
 	e.GET("/", web.TableHandler)
 
