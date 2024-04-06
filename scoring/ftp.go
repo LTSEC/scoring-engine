@@ -7,10 +7,9 @@ import (
 	"github.com/jlaffaye/ftp"
 )
 
-// Connects to an IP address and returns a connection,
-// if it could connect
-func Connect(address string, username string, password string) (string, error) {
-	connection, err := ftp.Dial(address, ftp.DialWithTimeout(5*time.Second))
+// Attempts a connection via FTP and returns a boolean value representing success
+func FTPConnect(address string, username string, password string) (string, error) {
+	connection, err := ftp.Dial(address+":21", ftp.DialWithTimeout(250*time.Millisecond))
 	if err != nil {
 		return "", err
 	}
