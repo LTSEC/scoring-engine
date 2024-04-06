@@ -25,5 +25,4 @@ require (
 	golang.org/x/text v0.14.0 // indirect
 	golang.org/x/time v0.5.0 // indirect
 	gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405 // indirect
-	gopkg.in/yaml.v2 v2.4.0 // indirect
 )

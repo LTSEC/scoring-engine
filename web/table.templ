@@ -5,34 +5,47 @@ templ Table(teams []string, services []string, state bool) {
     <html>
     <head>
     <body>
-    <script> src="/assets/htmx.min.js"</script>
+    
+    // Javascript logic to change the color of services
+    <script type="text/javascript">
+        var isTrue = false;
+        
+        if (isTrue) {
+            document.querySelector(".upColor").classList.add("upColor");
+        } else {
+            document.querySelector(".upColor").classList.replace("upColor", "downColor");
+        }
+    </script>
+    
     <style>
-    table, th, td, tr {
+    table, th, tr {
         border:1px solid black;
         font-size: 40px;
     }
+    .upColor {background-color: #66FF99;}
+    .downColor {background-color: #ff2c2c;}
+    
     </style>
     
-    <table>
+    <table class>
+        // Top row with service names
         <tr>
             <th>{ }</th>
             for _, service := range services {
                 <th>{ service }</th>
             }
         </tr>
+        
+        // First column with team names
         for _, team := range teams {
             <tr>
                 <td>{ team }</td>
                 for i := 0; i < len(services); i++ {
-                //TODO - get templ to display images
-                    <td> <img src="up.jpg" alt="up.jpg"/> </td>
+                    <td class="upColor"></td>
                 }
             </tr>
         }   
     </table>
-    <button hx-post="/clicked" hx-swap="outerHTML">
-        Test button
-    </button>
     </body>
     </head>
     </html>
