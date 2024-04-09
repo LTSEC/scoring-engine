@@ -1,7 +1,6 @@
 package web
 
-templ Table(teams []string, services []string, state bool) {
-    <!DOCTYPE html>
+templ Table(teams []string, services []string, up bool) {
     <html>
     <head>
     <body>
@@ -18,7 +17,7 @@ templ Table(teams []string, services []string, state bool) {
     </script>
     
     <style>
-    table, th, tr {
+    table, th, td {
         border:1px solid black;
         font-size: 40px;
     }
@@ -41,12 +40,11 @@ templ Table(teams []string, services []string, state bool) {
             <tr>
                 <td>{ team }</td>
                 for i := 0; i < len(services); i++ {
-                    <td class="upColor"></td>
+                    <td> { } </td>
                 }
             </tr>
         }   
     </table>
-    </body>
     </head>
     </html>
 }
