@@ -13,16 +13,22 @@ type Yaml struct {
 	WebScore int    `yaml:"webscore"`
 	WebIP    string `yaml:"webIP"`
 	WebDir   string `yaml:"webDir"`
+	Httpadd  int    `yaml:"httpadd"`
 
 	FtpScore int               `yaml:"ftpScore"`
 	FtpIP    string            `yaml:"ftpIP"`
 	FtpCreds map[string]string `yaml:"ftpCreds"`
+	Ftpadd   int               `yaml:"ftpadd"`
 
-	TeamScores map[string]int `yaml:"teamScores"`
+	TeamScores map[string]int    `yaml:"teamScores"`
+	TeamIps    map[string]string `yaml:"teamIps"`
 
 	SshIP    string            `yaml:"sshIP"`
 	PortNum  int               `yaml:"portNum"`
 	SshCreds map[string]string `yaml:"sshCreds"`
+	Sshadd   int               `yaml:"sshadd"`
+
+	SleepTime int `yaml:"sleepTime"`
 }
 
 // Parse uses the go-yaml library in order to take information out of a .yaml config file and place into a Yaml struct.

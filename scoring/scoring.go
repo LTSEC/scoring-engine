@@ -5,15 +5,18 @@ import (
 	"sync"
 	"time"
 
+	"github.com/LTSEC/scoring-engine/config"
 	"github.com/LTSEC/scoring-engine/logging"
 	"github.com/LTSEC/scoring-engine/score_holder"
 )
 
 var ScoringOn bool
 var mutex sync.Mutex
+var yamlConfig *config.Yaml
 
 // Starts the scoring process
-func ScoringStartup(teams []string, ftpadd int, sshadd int, httpadd int, sleeptime int, ip string, ipstartnum int) error {
+func ScoringStartup(yamlConfig *config.Yaml) error {
+	// add is
 	score_holder.Startup(teams)
 	logging.CreateLogFile()
 	ScoringOn = true

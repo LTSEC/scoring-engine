@@ -1,6 +1,6 @@
 module github.com/LTSEC/scoring-engine
 
-go 1.21.5
+go 1.22.2
 
 require (
 	github.com/a-h/templ v0.2.543
@@ -8,7 +8,6 @@ require (
 	github.com/jlaffaye/ftp v0.2.0
 	github.com/labstack/echo/v4 v4.11.4
 	golang.org/x/crypto v0.18.0
-	gopkg.in/yaml.v2 v2.4.0
 )
 
 require (

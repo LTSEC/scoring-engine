@@ -11,7 +11,7 @@ import (
 	"github.com/LTSEC/scoring-engine/scoring"
 )
 
-var yamlConfig config.Yaml
+var yamlConfig *config.Yaml
 
 // The CLI takes in user input from stdin to execute predetermined commands.
 // This is intended to be the primary method of control for the scoring engine.
@@ -84,7 +84,7 @@ func commandSelector(tokenizedInput []string) {
 	case "checkconfig":
 		fmt.Printf("%+v\n", yamlConfig)
 	case "score":
-		scoring.Scoring()
+		scoring.ScoringStartup(yamlConfig)
 	default:
 		bashInjection(tokenizedInput)
 	}

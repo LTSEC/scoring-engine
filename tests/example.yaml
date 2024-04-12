@@ -2,6 +2,7 @@
 webScore: 0
 webIP: "localhost"
 webDir: "/"
+httpAdd: 0
 
 ftpScore: 0
 ftpIP: "localhost"
@@ -9,6 +10,7 @@ ftpCreds:
   user1 : pass1
   user2 : pass2
   user3 : pass3
+ftpAdd: 0
 
 teamScores: 
   team1 : 0
@@ -16,9 +18,18 @@ teamScores:
   team3 : 0
   team4 : 0
 
+teamIps:
+  team1 : "localhost"
+  team2 : "localhost"
+  team3 : "localhost"
+  team4 : "localhost"
+
 sshIP: "localhost"
 portNum: 22
 sshCreds:
   user1 : pass1
   user2 : pass2
   user3 : pass3
+sshAdd: 0
+
+sleepTime: 0
