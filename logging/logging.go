@@ -8,74 +8,90 @@ import (
 	"time"
 )
 
-var (
-	file        *os.File
-	mutex       sync.Mutex
+type Logger struct {
+	logFile     *os.File
+	logger      *log.Logger
+	once        sync.Once
 	initialized bool
+}
 
-	// Loggers
-	infoLogger    *log.Logger
-	warningLogger *log.Logger
-	errorLogger   *log.Logger
-)
-
-// CreateLogFile prepares the logging environment by creating a log file based on the current date and time.
-func CreateLogFile() {
-	now := time.Now()
-	fileName := now.Format("2006-01-02_15-04-05") + " Log.txt"
+// create logger on the Main body and pass it to any routines. ensures the constructor is only called once
+// for the rest of its life time
+func (l *Logger) StartLog() error {
 	var err error
-	file, err = os.Create(fileName)
+	l.once.Do(func() {
+		err = l.initialize()
+	})
+	return err
+}
+
+// called in individual routines
+func (l *Logger) LogMessage(msg string, status string) {
+	if l.initialized {
+		message := fmt.Sprintf(" %s: %s", status, msg)
+		l.logger.Println(message)
+	}
+}
+
+// called whenever the Main code is finished as a cleanup
+func (l *Logger) StopLog() error {
+	var err error
+	if l.initialized {
+		if l.logFile != nil {
+			err := l.logFile.Close()
+			if err != nil {
+				fmt.Println("Failed to close log file")
+			}
+		}
+	}
+	return err
+}
+
+// serves as the constructor for the logger struct. sets the fields for what file to use and creates the logger
+func (l *Logger) initialize() error {
+	var err error
+	filePath := getLogPath('\\')
+	timeAndDate := time.Now().Format("2006-01-02 15-04-05")
+	fileName := fmt.Sprintf("%s%s.txt", filePath, timeAndDate)
+	l.logFile, err = os.Create(fileName)
 	if err != nil {
-		log.Printf("Failed to create log file: %v", err)
-		return
+		return err
 	}
-	SetLogFile(file) // Pass the file descriptor directly.
+	l.logger = log.New(l.logFile, "", log.Ltime)
+	l.initialized = true
+	return nil
 }
 
-// SetLogFile configures the logging mechanism to output to a specified file.
-func SetLogFile(f *os.File) {
-	mutex.Lock()
-	defer mutex.Unlock()
-
-	if file != nil {
-		file.Close() // Ensure the previously opened file is closed before reassignment.
+// for creating a "Logs" folder in the directory. arguments are '\\' for windows and '/' for linux
+// currently it is set for Windows. if you want to change it, go to initilaize and change it there.
+func getLogPath(fileSeparator byte) string {
+	var lastIndex int
+	// gets current directory
+	dirPath, err := os.Getwd()
+	if err != nil {
+		fmt.Println("Failed to get working directory")
+		return ""
 	}
-
-	file = f // Assign the new file descriptor.
-
-	// Initialize loggers with the new file.
-	infoLogger = log.New(file, "INFO: ", log.Ldate|log.Ltime|log.Lshortfile)
-	warningLogger = log.New(file, "WARNING: ", log.Ldate|log.Ltime|log.Lshortfile)
-	errorLogger = log.New(file, "ERROR: ", log.Ldate|log.Ltime|log.Lshortfile)
-
-	initialized = true // Mark the logging system as initialized.
-}
-
-// LogMessage allows logging a message with a specified severity.
-func LogMessage(severity, message string) {
-	if !initialized {
-		fmt.Println("Logging system not initialized")
-		return
+	// finds the index starting from right to left to find the delimiter's index
+	for i := len(dirPath) - 1; i >= 0; i-- {
+		if dirPath[i] == fileSeparator {
+			lastIndex = i
+			break
+		}
 	}
-
-	mutex.Lock()
-	defer mutex.Unlock()
-
-	switch severity {
-	case "info":
-		infoLogger.Println(message)
-	case "warning":
-		warningLogger.Println(message)
-	case "error":
-		errorLogger.Println(message)
-	default:
-		fmt.Println("Invalid severity specified:", severity)
+	// truncates everything until that index. this gives us the base path
+	dirPath = dirPath[:lastIndex+1]
+	// joins "Logs" with the base path which is where we will store our Log files
+	newPath := fmt.Sprintf("%sLogs", dirPath)
+	fmt.Println(newPath)
+	// if the path doesn't exist, it creates one. may need to change the permissions later
+	if _, err := os.Stat(newPath); err != nil {
+		if os.IsNotExist(err) {
+			os.Mkdir(newPath, 0644)
+		}
 	}
-}
-
-// StopLog should be called to close the log file before the application exits.
-func StopLog() {
-	if file != nil {
-		file.Close()
-	}
+	// adds the delimiter ahead of the path name. this so that all we need to do is append a name to it later on
+	// to create a file underneath this directory
+	newPath = fmt.Sprintf("%s%c", newPath, fileSeparator)
+	return newPath
 }
