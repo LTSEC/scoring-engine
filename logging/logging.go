@@ -1,81 +1,57 @@
 package logging
 
-import (
-	"fmt"
-	"log"
-	"os"
-	"sync"
-	"time"
-)
+import "fmt"
 
-var (
-	file        *os.File
-	mutex       sync.Mutex
-	initialized bool
+// for use in other programs
 
-	// Loggers
-	infoLogger    *log.Logger
-	warningLogger *log.Logger
-	errorLogger   *log.Logger
-)
-
-// CreateLogFile prepares the logging environment by creating a log file based on the current date and time.
-func CreateLogFile() {
-	now := time.Now()
-	fileName := now.Format("2006-01-02_15-04-05") + " Log.txt"
-	var err error
-	file, err = os.Create(fileName)
-	if err != nil {
-		log.Printf("Failed to create log file: %v", err)
-		return
-	}
-	SetLogFile(file) // Pass the file descriptor directly.
-}
-
-// SetLogFile configures the logging mechanism to output to a specified file.
-func SetLogFile(f *os.File) {
-	mutex.Lock()
-	defer mutex.Unlock()
-
-	if file != nil {
-		file.Close() // Ensure the previously opened file is closed before reassignment.
-	}
-
-	file = f // Assign the new file descriptor.
-
-	// Initialize loggers with the new file.
-	infoLogger = log.New(file, "INFO: ", log.Ldate|log.Ltime|log.Lshortfile)
-	warningLogger = log.New(file, "WARNING: ", log.Ldate|log.Ltime|log.Lshortfile)
-	errorLogger = log.New(file, "ERROR: ", log.Ldate|log.Ltime|log.Lshortfile)
-
-	initialized = true // Mark the logging system as initialized.
-}
-
-// LogMessage allows logging a message with a specified severity.
-func LogMessage(severity, message string) {
-	if !initialized {
-		fmt.Println("Logging system not initialized")
-		return
-	}
-
-	mutex.Lock()
-	defer mutex.Unlock()
-
-	switch severity {
-	case "info":
-		infoLogger.Println(message)
-	case "warning":
-		warningLogger.Println(message)
-	case "error":
-		errorLogger.Println(message)
-	default:
-		fmt.Println("Invalid severity specified:", severity)
+// for individual use in routines
+func (l *Logger) LogMessage(msg string, status string) {
+	// fmt.Println("LogMessage is NOT being called")
+	if l != nil && l.status {
+		// fmt.Println("LogMessage is being called")
+		message := fmt.Sprintf(" %s: %s", status, msg)
+		l.logger.Println(message)
 	}
 }
 
-// StopLog should be called to close the log file before the application exits.
-func StopLog() {
-	if file != nil {
-		file.Close()
+func (l *Logger) GetStatus() bool {
+	l.mutex.Lock()
+	defer l.mutex.Unlock()
+	return l.status
+}
+
+// takes a pointer to a pointer of a logger. creates the log file but doesn't immediately log
+func CreateLogFile(l **Logger) {
+	newLogger := new(Logger)
+	newLogger.initialize()
+	*l = newLogger
+}
+
+// called either to start logging or to resume logging (if PauseLog was called)
+func StartLog(l *Logger) {
+	if l != nil && !l.status {
+		l.mutex.Lock()
+		defer l.mutex.Unlock()
+		l.setupLogger()
+		l.status = true
+		fmt.Println(fmt.Printf("%t", l.status))
+	}
+}
+
+/* will come back to this later
+func PauseLog(l *Logger) {
+	if l != nil && l.status {
+		l.mutex.Lock()
+		defer l.mutex.Unlock()
+		l.status = false
+	}
+}
+*/
+
+// should be called when you want to stop logging in the program as a whole- not when you're finished in one routine
+func StopLog(l *Logger) {
+	l.status = false
+	if l != nil {
+		l.cleanup()
 	}
 }
