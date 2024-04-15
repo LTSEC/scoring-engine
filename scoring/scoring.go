@@ -46,14 +46,22 @@ func ScoringToggle(state bool) error {
 	return nil
 }
 
+func b2i(b bool) int {
+	// The compiler currently only optimizes this form.
+	// See issue 6011.
+	var i int
+	if b {
+		i = 1
+	} else {
+		i = 0
+	}
+	return i
+}
+
 // Scores an individual team
 func scoreTeam(index int, teamName string, yamlConfig *config.Yaml, logger *logging.Logger) {
 	mutex.Lock()
 	defer mutex.Unlock()
-	var scoreaddftp int
-	var scoreaddssh int
-	var scoreaddhttp int
-
 	var FTPUser string
 	var FTPPass string
 
@@ -98,18 +106,7 @@ func scoreTeam(index int, teamName string, yamlConfig *config.Yaml, logger *logg
 		logger.LogMessage(err.Error(), "error")
 	}
 
-	if ftp != "" {
-		scoreaddftp += yamlConfig.Ftpadd
-	}
-
-	if ssh {
-		scoreaddssh += yamlConfig.Sshadd
-	}
-
-	if http {
-		scoreaddhttp += yamlConfig.Httpadd
-	}
-
-	score_holder.UpdateTeam(index, score_holder.NewScoreMap(scoreaddftp, scoreaddhttp, scoreaddssh),
+	score_holder.UpdateTeam(index, score_holder.NewScoreMap(yamlConfig.Ftpadd*b2i(ftp != ""),
+		yamlConfig.Sshadd*b2i(ssh), yamlConfig.Httpadd*b2i(ssh)),
 		score_holder.NewStateMap(ftp != "", ssh, http))
 }
