@@ -9,8 +9,8 @@ import (
 
 func TestScoring(t *testing.T) {
 	go func() {
-		t.Log(ScoringStartup(config.Parse("E:/Projects/scoring-engine/tests/example.yaml")))
+		t.Log(ScoringStartup(config.Parse("../tests/test_yaml.yaml")))
 	}()
-	time.Sleep(1 * time.Second)
+	time.Sleep(10 * time.Second)
 	t.Log(ScoringToggle(false))
 }

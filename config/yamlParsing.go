@@ -12,15 +12,15 @@ import (
 type Yaml struct {
 	WebPortNum string `yaml:"webPortNum"`
 	WebDir     string `yaml:"webDir"`
-	Httpadd    int    `yaml:"httpadd"`
+	Httpadd    int    `yaml:"httpAdd"`
 
 	FtpPortNum string            `yaml:"ftpPortNum"`
 	FtpCreds   map[string]string `yaml:"ftpCreds"`
-	Ftpadd     int               `yaml:"ftpadd"`
+	Ftpadd     int               `yaml:"ftpAdd"`
 
 	SshPortNum string            `yaml:"sshPortNum"`
 	SshCreds   map[string]string `yaml:"sshCreds"`
-	Sshadd     int               `yaml:"sshadd"`
+	Sshadd     int               `yaml:"sshAdd"`
 
 	TeamScores map[string]int    `yaml:"teamScores"`
 	TeamIpsFTP map[string]string `yaml:"teamIpsftp"`

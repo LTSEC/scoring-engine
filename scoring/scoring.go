@@ -24,12 +24,13 @@ func ScoringStartup(yamlConfig *config.Yaml) error {
 	}
 
 	score_holder.Startup(TeamNames)
-	logging.CreateLogFile()
+	logger := new(logging.Logger)
+	logger.StartLog()
 	ScoringOn = true
 	// todo: make scoring on pause scoring instead of just stopping it entirely, so that it may be resumed later
 	for ScoringOn {
 		for index, teamName := range TeamNames {
-			go scoreTeam(index, teamName, yamlConfig)
+			go scoreTeam(index, teamName, yamlConfig, logger)
 		}
 
 		time.Sleep(time.Duration(yamlConfig.SleepTime) * time.Second)
@@ -46,7 +47,7 @@ func ScoringToggle(state bool) error {
 }
 
 // Scores an individual team
-func scoreTeam(index int, teamName string, yamlConfig *config.Yaml) {
+func scoreTeam(index int, teamName string, yamlConfig *config.Yaml, logger *logging.Logger) {
 	mutex.Lock()
 	defer mutex.Unlock()
 	var scoreaddftp int
@@ -84,17 +85,17 @@ func scoreTeam(index int, teamName string, yamlConfig *config.Yaml) {
 
 	ftp, err := FTPConnect(yamlConfig.TeamIpsFTP[teamName], yamlConfig.FtpPortNum, FTPUser, FTPPass)
 	if err != nil {
-		logging.LogMessage("error", err.Error())
+		logger.LogMessage(err.Error(), "error")
 	}
 
-	ssh, err := SSHConnect(yamlConfig.TeamIpsSSH[teamName], yamlConfig.FtpPortNum, SSHUser, SSHPass)
+	ssh, err := SSHConnect(yamlConfig.TeamIpsSSH[teamName], yamlConfig.SshPortNum, SSHUser, SSHPass)
 	if err != nil {
-		logging.LogMessage("error", err.Error())
+		logger.LogMessage(err.Error(), "error")
 	}
 
 	http, err := CheckWeb(yamlConfig.WebDir, yamlConfig.TeamIpsWeb[teamName], yamlConfig.WebPortNum)
 	if err != nil {
-		logging.LogMessage("error", err.Error())
+		logger.LogMessage(err.Error(), "error")
 	}
 
 	if ftp != "" {
