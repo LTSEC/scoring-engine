@@ -8,8 +8,8 @@ import (
 )
 
 // Attempts a connection via FTP and returns a boolean value representing success
-func FTPConnect(address string, username string, password string) (string, error) {
-	connection, err := ftp.Dial(address+":21", ftp.DialWithTimeout(250*time.Millisecond))
+func FTPConnect(address string, portNum string, username string, password string) (string, error) {
+	connection, err := ftp.Dial(address+":"+portNum, ftp.DialWithTimeout(250*time.Millisecond))
 	if err != nil {
 		return "", err
 	}

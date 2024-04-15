@@ -1,16 +1,21 @@
 ---
-webScore: 0
-webIP: "localhost"
+webPortNum: "80"
 webDir: "/"
-httpAdd: 0
+httpAdd: 1
 
-ftpScore: 0
-ftpIP: "localhost"
+ftpPortNum: "21"
 ftpCreds:
   user1 : pass1
   user2 : pass2
   user3 : pass3
-ftpAdd: 0
+ftpAdd: 1
+
+sshPortNum: "22"
+sshCreds:
+  user1 : pass1
+  user2 : pass2
+  user3 : pass3
+sshAdd: 1
 
 teamScores: 
   team1 : 0
@@ -18,18 +23,22 @@ teamScores:
   team3 : 0
   team4 : 0
 
-teamIps:
+teamIpsftp:
   team1 : "localhost"
   team2 : "localhost"
   team3 : "localhost"
   team4 : "localhost"
 
-sshIP: "localhost"
-portNum: 22
-sshCreds:
-  user1 : pass1
-  user2 : pass2
-  user3 : pass3
-sshAdd: 0
+teamIpsssh:
+  team1 : "localhost"
+  team2 : "localhost"
+  team3 : "localhost"
+  team4 : "localhost"
 
-sleepTime: 0
+teamIpsweb:
+  team1 : "localhost"
+  team2 : "localhost"
+  team3 : "localhost"
+  team4 : "localhost"
+
+sleepTime: 1

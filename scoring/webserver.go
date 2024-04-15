@@ -53,15 +53,15 @@ func onPage(link string, ip string) ([]byte, error) {
 	return res_body, nil
 }
 
-// Dials website directly for speed then tries to download and compare website HTMLs if successful
-func CheckWeb(dir string, ip string) (bool, error) {
+// Dials website directly for speed then tries to download and compare website HTMLs if successful.
+// DOESN'T CHECK HTTPS ONLY HTTP
+func CheckWeb(dir string, ip string, portNum string) (bool, error) {
 
 	err := web_startup(dir)
 	if err != nil {
 		return false, err
 	}
-
-	pagehtml, err := onPage("http://"+ip, ip+":80")
+	pagehtml, err := onPage("http://"+ip, ip+":"+portNum)
 	if err != nil {
 		return false, err
 	}

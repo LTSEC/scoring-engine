@@ -10,23 +10,22 @@ import (
 // The Yaml type is meant to store the data from a configuration yaml.
 // This struct needs to be updated any time there is new information meant to be brought in through the yaml.
 type Yaml struct {
-	WebScore int    `yaml:"webscore"`
-	WebIP    string `yaml:"webIP"`
-	WebDir   string `yaml:"webDir"`
-	Httpadd  int    `yaml:"httpadd"`
+	WebPortNum string `yaml:"webPortNum"`
+	WebDir     string `yaml:"webDir"`
+	Httpadd    int    `yaml:"httpadd"`
 
-	FtpScore int               `yaml:"ftpScore"`
-	FtpIP    string            `yaml:"ftpIP"`
-	FtpCreds map[string]string `yaml:"ftpCreds"`
-	Ftpadd   int               `yaml:"ftpadd"`
+	FtpPortNum string            `yaml:"ftpPortNum"`
+	FtpCreds   map[string]string `yaml:"ftpCreds"`
+	Ftpadd     int               `yaml:"ftpadd"`
+
+	SshPortNum string            `yaml:"sshPortNum"`
+	SshCreds   map[string]string `yaml:"sshCreds"`
+	Sshadd     int               `yaml:"sshadd"`
 
 	TeamScores map[string]int    `yaml:"teamScores"`
-	TeamIps    map[string]string `yaml:"teamIps"`
-
-	SshIP    string            `yaml:"sshIP"`
-	PortNum  int               `yaml:"portNum"`
-	SshCreds map[string]string `yaml:"sshCreds"`
-	Sshadd   int               `yaml:"sshadd"`
+	TeamIpsFTP map[string]string `yaml:"teamIpsftp"`
+	TeamIpsSSH map[string]string `yaml:"teamIpsssh"`
+	TeamIpsWeb map[string]string `yaml:"teamIpsweb"`
 
 	SleepTime int `yaml:"sleepTime"`
 }
