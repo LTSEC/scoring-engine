@@ -6,8 +6,20 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+
+	"github.com/LTSEC/scoring-engine/config"
+	"github.com/LTSEC/scoring-engine/scoring"
 )
 
+var yamlConfig *config.Yaml
+
+// The CLI takes in user input from stdin to execute predetermined commands.
+// This is intended to be the primary method of control for the scoring engine.
+//
+// Any input is tokenized into a slice, of which the first word is meant to act as the command.
+// The subsequent inputs are meant to be passed to a later function that is called by the command if applicable.
+//
+// If input does not match any commands for the engine, then the entire command is passed into bash for handling.
 func Cli() {
 
 	var userInput string
@@ -61,6 +73,18 @@ func commandSelector(tokenizedInput []string) {
 	case "hello":
 		fmt.Println("it was hello!")
 	// default case to pipe into bash
+	case "help":
+		fmt.Println("Available commands:\nhello (testing output)\nconfig (takes in a path and pulls down/prints current yaml config)\nexit (exits the CLI)\nAll other commands will be passed to bash.")
+	case "config":
+		if len(tokenizedInput) != 2 {
+			fmt.Println("config requires a path")
+		} else {
+			yamlConfig = config.Parse(tokenizedInput[1])
+		}
+	case "checkconfig":
+		fmt.Printf("%+v\n", yamlConfig)
+	case "score":
+		scoring.ScoringStartup(yamlConfig)
 	default:
 		bashInjection(tokenizedInput)
 	}

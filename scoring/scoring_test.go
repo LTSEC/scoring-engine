@@ -3,12 +3,14 @@ package scoring
 import (
 	"testing"
 	"time"
+
+	"github.com/LTSEC/scoring-engine/config"
 )
 
 func TestScoring(t *testing.T) {
 	go func() {
-		t.Log(ScoringStartup([]string{"Team1", "Team2", "Team3", "Team4"}, 5, 1, 1, 5, "172.29.1.", 5))
+		t.Log(ScoringStartup(config.Parse("../tests/test_yaml.yaml")))
 	}()
-	time.Sleep(11 * time.Second)
+	time.Sleep(10 * time.Second)
 	t.Log(ScoringToggle(false))
 }
