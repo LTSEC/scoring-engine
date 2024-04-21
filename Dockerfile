@@ -8,8 +8,5 @@ RUN curl -LJO https://github.com/LTSEC/scoring-engine/archive/refs/heads/main.zi
 RUN unzip ./scoring-engine-main.zip
 
 WORKDIR ./scoring-engine-main
-RUN go build ./cmd/main.go
-RUN ls -l
-
-CMD [ "./scoring-engine-main/scoring-engine" ]
+CMD ["go", "run", "./cmd/main.go"]
 
