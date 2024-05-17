@@ -22,9 +22,9 @@ func main() {
 
 	go cli.Cli()
 
-	// Start server
+	// Start web server
 	go e.Logger.Fatal(e.Start(":8080"))
 
-	// start the db
-	//go score_holder.Startup()
+	// Start the scoring
+	// go scoring.ScoringStartup()
 }

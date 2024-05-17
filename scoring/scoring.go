@@ -1,6 +1,7 @@
 package scoring
 
 import (
+	"fmt"
 	"math/rand"
 	"sync"
 	"time"
@@ -12,38 +13,48 @@ import (
 
 var ScoringOn bool
 var mutex sync.Mutex
+var logger *logging.Logger
+var TeamNames []string
 
 // Starts the scoring process
 func ScoringStartup(yamlConfig *config.Yaml) error {
 	// get list of teams from existing maps
 	i := 0
-	TeamNames := make([]string, len(yamlConfig.TeamScores))
+	TeamNames = make([]string, len(yamlConfig.TeamScores))
 	for k := range yamlConfig.TeamScores {
 		TeamNames[i] = k
 		i++
 	}
 
 	score_holder.Startup(TeamNames)
-	logger := new(logging.Logger)
+	logger = new(logging.Logger)
 	logger.StartLog()
 	ScoringOn = true
 	// todo: make scoring on pause scoring instead of just stopping it entirely, so that it may be resumed later
-	for ScoringOn {
-		for index, teamName := range TeamNames {
-			go scoreTeam(index, teamName, yamlConfig, logger)
-		}
-
-		time.Sleep(time.Duration(yamlConfig.SleepTime) * time.Second)
-	}
+	activelyScore(yamlConfig)
 
 	return nil
 }
 
 // Ends the scoring process
-func ScoringToggle(state bool) error {
-	//logging.LogMessage("info", "Stopping scoring")
+func ScoringToggle(state bool, yamlConfig *config.Yaml) error {
+	logger.LogMessage(fmt.Sprint("Engine online: ", state), "Info")
 	ScoringOn = state
+	if state == true {
+		activelyScore(yamlConfig)
+	}
 	return nil
+}
+
+// Restarts the scoring process
+func activelyScore(yamlConfig *config.Yaml) {
+	for ScoringOn {
+		for index, teamName := range TeamNames {
+			go scoreTeam(index, teamName, yamlConfig)
+		}
+
+		time.Sleep(time.Duration(yamlConfig.SleepTime) * time.Second)
+	}
 }
 
 func b2i(b bool) int {
@@ -59,7 +70,7 @@ func b2i(b bool) int {
 }
 
 // Scores an individual team
-func scoreTeam(index int, teamName string, yamlConfig *config.Yaml, logger *logging.Logger) {
+func scoreTeam(index int, teamName string, yamlConfig *config.Yaml) {
 	mutex.Lock()
 	defer mutex.Unlock()
 	var FTPUser string
@@ -93,20 +104,20 @@ func scoreTeam(index int, teamName string, yamlConfig *config.Yaml, logger *logg
 
 	ftp, err := FTPConnect(yamlConfig.TeamIpsFTP[teamName], yamlConfig.FtpPortNum, FTPUser, FTPPass)
 	if err != nil {
-		logger.LogMessage(err.Error(), "error")
+		logger.LogMessage(err.Error(), "FTP Error")
 	}
 
 	ssh, err := SSHConnect(yamlConfig.TeamIpsSSH[teamName], yamlConfig.SshPortNum, SSHUser, SSHPass)
 	if err != nil {
-		logger.LogMessage(err.Error(), "error")
+		logger.LogMessage(err.Error(), "SSH Error")
 	}
 
 	http, err := CheckWeb(yamlConfig.WebDir, yamlConfig.TeamIpsWeb[teamName], yamlConfig.WebPortNum)
 	if err != nil {
-		logger.LogMessage(err.Error(), "error")
+		logger.LogMessage(err.Error(), "HTTP Error")
 	}
 
 	score_holder.UpdateTeam(index, score_holder.NewScoreMap(yamlConfig.Ftpadd*b2i(ftp != ""),
-		yamlConfig.Sshadd*b2i(ssh), yamlConfig.Httpadd*b2i(ssh)),
-		score_holder.NewStateMap(ftp != "", ssh, http))
+		yamlConfig.Httpadd*b2i(http), yamlConfig.Sshadd*b2i(ssh)),
+		score_holder.NewStateMap(ftp != "", http, ssh))
 }

@@ -1,44 +1,34 @@
 ---
 webPortNum: "80"
-webDir: "/"
+webDir: "./tests/site_infos/site_info.html"
 httpAdd: 1
 
 ftpPortNum: "21"
 ftpCreds:
   user1 : pass1
-  user2 : pass2
-  user3 : pass3
+
 ftpAdd: 1
 
-sshPortNum: "22"
+sshPortNum: "2020"
 sshCreds:
-  user1 : pass1
-  user2 : pass2
-  user3 : pass3
+  bastion : computadora
+
 sshAdd: 1
 
 teamScores: 
   team1 : 0
   team2 : 0
-  team3 : 0
-  team4 : 0
 
 teamIpsftp:
   team1 : "localhost"
   team2 : "localhost"
-  team3 : "localhost"
-  team4 : "localhost"
 
 teamIpsssh:
-  team1 : "172.29.1.5"
-  team2 : "172.29.1.5"
-  team3 : "172.29.1.5"
-  team4 : "172.29.1.5"
+  team1 : "10.176.5.20"
+  team2 : "10.176.6.20"
 
 teamIpsweb:
   team1 : "localhost"
   team2 : "localhost"
-  team3 : "localhost"
-  team4 : "localhost"
 
 sleepTime: 1

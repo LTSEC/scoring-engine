@@ -5,9 +5,11 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"reflect"
 	"strings"
 
 	"github.com/LTSEC/scoring-engine/config"
+	"github.com/LTSEC/scoring-engine/score_holder"
 	"github.com/LTSEC/scoring-engine/scoring"
 )
 
@@ -32,8 +34,7 @@ func Cli() {
 		fmt.Print(currDirectory + "$ ")
 		userInput = inputParser()
 		// slicing off the new line character for ease in manipulation and such
-		userInput = userInput[0 : len(userInput)-1]
-		// fmt.Println(userInput + "\n")
+		userInput = strings.TrimSuffix(userInput, "\r\n")
 		// if exit is typed, we want to exit the program
 		if userInput == "exit" {
 			break
@@ -66,6 +67,16 @@ func tokenizer(userInput string) []string {
 // switch statement for command selection
 func commandSelector(tokenizedInput []string) {
 
+	HelpOutput := `Available commands:
+	hello (Testing output)
+	help (Outputs some helpful information)
+	config (Recieves a path and parses the yaml config given)
+	checkconfig (Outputs the currently parsed yaml config)
+	score (Starts the scoring engine)
+	togglescore (Toggles the scoring engine on/off if its already started)
+	exit (exits the CLI)
+	`
+
 	// the switch acts on the first word of the command
 	// the idea is that you'd pass the remaining args to the requisit functions
 	switch tokenizedInput[0] {
@@ -74,7 +85,7 @@ func commandSelector(tokenizedInput []string) {
 		fmt.Println("it was hello!")
 	// default case to pipe into bash
 	case "help":
-		fmt.Println("Available commands:\nhello (testing output)\nconfig (takes in a path and pulls down/prints current yaml config)\nexit (exits the CLI)\nAll other commands will be passed to bash.")
+		fmt.Println(HelpOutput)
 	case "config":
 		if len(tokenizedInput) != 2 {
 			fmt.Println("config requires a path")
@@ -84,7 +95,30 @@ func commandSelector(tokenizedInput []string) {
 	case "checkconfig":
 		fmt.Printf("%+v\n", yamlConfig)
 	case "score":
-		scoring.ScoringStartup(yamlConfig)
+		if yamlConfig != nil {
+			go scoring.ScoringStartup(yamlConfig)
+		} else {
+			fmt.Println("Provide a config first.")
+		}
+	case "togglescore":
+		if scoring.ScoringOn == true {
+			scoring.ScoringToggle(false, yamlConfig)
+		} else if scoring.ScoringOn == false {
+			go scoring.ScoringToggle(true, yamlConfig)
+		}
+	case "listscore":
+		for TeamName, TeamData := range score_holder.GetMap() {
+			for _, Data := range TeamData {
+				for dtype, Score := range Data {
+					if reflect.TypeOf(Score) == reflect.TypeOf(1) {
+						fmt.Println(fmt.Sprint(TeamName, ": ", dtype, " : ", Score))
+					}
+				}
+			}
+		}
+	case "exit":
+		os.Exit(0)
+
 	default:
 		bashInjection(tokenizedInput)
 	}

@@ -12,5 +12,4 @@ func TestScoring(t *testing.T) {
 		t.Log(ScoringStartup(config.Parse("../tests/test_yaml.yaml")))
 	}()
 	time.Sleep(10 * time.Second)
-	t.Log(ScoringToggle(false))
 }
