@@ -14,6 +14,7 @@ import (
 )
 
 var yamlConfig *config.Yaml
+var ScoringStarted = false
 
 // The CLI takes in user input from stdin to execute predetermined commands.
 // This is intended to be the primary method of control for the scoring engine.
@@ -83,7 +84,6 @@ func commandSelector(tokenizedInput []string) {
 	// test case
 	case "hello":
 		fmt.Println("it was hello!")
-	// default case to pipe into bash
 	case "help":
 		fmt.Println(HelpOutput)
 	case "config":
@@ -95,26 +95,39 @@ func commandSelector(tokenizedInput []string) {
 	case "checkconfig":
 		fmt.Printf("%+v\n", yamlConfig)
 	case "score":
-		if yamlConfig != nil {
-			go scoring.ScoringStartup(yamlConfig)
+		if ScoringStarted == false {
+			ScoringStarted = true
+			if yamlConfig != nil {
+				go scoring.ScoringStartup(yamlConfig)
+			} else {
+				fmt.Println("Provide a config first.")
+			}
 		} else {
-			fmt.Println("Provide a config first.")
+			fmt.Println("The scoring engine has already been initalized.")
 		}
 	case "togglescore":
-		if scoring.ScoringOn == true {
-			scoring.ScoringToggle(false, yamlConfig)
-		} else if scoring.ScoringOn == false {
-			go scoring.ScoringToggle(true, yamlConfig)
+		if ScoringStarted == true {
+			if scoring.ScoringOn == true {
+				scoring.ScoringToggle(false, yamlConfig)
+			} else if scoring.ScoringOn == false {
+				go scoring.ScoringToggle(true, yamlConfig)
+			}
+		} else {
+			fmt.Println("Initalize the scoring engine first.")
 		}
 	case "listscore":
-		for TeamName, TeamData := range score_holder.GetMap() {
-			for _, Data := range TeamData {
-				for dtype, Score := range Data {
-					if reflect.TypeOf(Score) == reflect.TypeOf(1) {
-						fmt.Println(fmt.Sprint(TeamName, ": ", dtype, " : ", Score))
+		if ScoringStarted == true {
+			for TeamName, TeamData := range score_holder.GetMap() {
+				for _, Data := range TeamData {
+					for dtype, Score := range Data {
+						if reflect.TypeOf(Score) == reflect.TypeOf(1) {
+							fmt.Println(fmt.Sprint(TeamName, ": ", dtype, " : ", Score))
+						}
 					}
 				}
 			}
+		} else {
+			fmt.Println("Initalize the scoring engine first.")
 		}
 	case "exit":
 		os.Exit(0)
