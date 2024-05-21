@@ -102,6 +102,10 @@ func commandSelector(tokenizedInput []string) {
 			} else {
 				fmt.Println("Provide a config first.")
 			}
+
+			// Setting the variables for frontend
+			//web.SetData(getKeys(yamlConfig.TeamScores), []string{"ssh", "ftp", "html"})
+
 		} else {
 			fmt.Println("The scoring engine has already been initalized.")
 		}
@@ -121,7 +125,7 @@ func commandSelector(tokenizedInput []string) {
 				for _, Data := range TeamData {
 					for dtype, Score := range Data {
 						if reflect.TypeOf(Score) == reflect.TypeOf(1) {
-							fmt.Println(fmt.Sprint(TeamName, ": ", dtype, " : ", Score))
+							fmt.Println(fmt.Sprint("Team ", TeamName, ":	", dtype, " ", Score))
 						}
 					}
 				}

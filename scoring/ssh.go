@@ -15,19 +15,6 @@ func SSHConnect(hostname string, port string, username string, password string) 
 	//var key ssh.Signer
 	var err error
 
-	/*
-		 	key, err = ssh.ParsePrivateKey(pKey)
-			if err != nil {
-				return false, err
-			}
-
-			var hostkeyCallback ssh.HostKeyCallback
-			hostkeyCallback, err = knownhosts.New("C:/Users/Aidan Feess/.ssh/known_hosts")
-			if err != nil {
-				return false, err
-			}
-	*/
-
 	// client config, ignore hostkey because we don't plan on having the IP change
 	// reenable hostkey callback if we need to worry about dynamic ips in the future
 	// todo: add optional public key

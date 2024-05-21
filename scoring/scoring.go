@@ -3,6 +3,7 @@ package scoring
 import (
 	"fmt"
 	"math/rand"
+	"slices"
 	"sync"
 	"time"
 
@@ -11,10 +12,12 @@ import (
 	"github.com/LTSEC/scoring-engine/score_holder"
 )
 
-var ScoringOn bool
-var mutex sync.Mutex
-var logger *logging.Logger
-var TeamNames []string
+var (
+	ScoringOn bool
+	mutex     sync.Mutex
+	logger    *logging.Logger
+	TeamNames []string
+)
 
 // Starts the scoring process
 func ScoringStartup(yamlConfig *config.Yaml) error {
@@ -25,6 +28,7 @@ func ScoringStartup(yamlConfig *config.Yaml) error {
 		TeamNames[i] = k
 		i++
 	}
+	slices.Sort(TeamNames)
 
 	score_holder.Startup(TeamNames)
 	logger = new(logging.Logger)
@@ -73,6 +77,7 @@ func b2i(b bool) int {
 func scoreTeam(index int, teamName string, yamlConfig *config.Yaml) {
 	mutex.Lock()
 	defer mutex.Unlock()
+
 	var FTPUser string
 	var FTPPass string
 

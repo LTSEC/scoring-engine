@@ -1,6 +1,6 @@
 ---
 webPortNum: "80"
-webDir: "./tests/site_infos/site_info.html"
+webDir: "../scoring-engine/tests/site_infos/site_info.html"
 httpAdd: 1
 
 ftpPortNum: "21"

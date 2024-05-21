@@ -19,7 +19,7 @@ func FTPConnect(address string, portNum string, username string, password string
 		return "", err
 	}
 
-	result, err := connection.Retr("textfile.txt")
+	result, err := connection.Retr("testfile")
 	if err != nil {
 		return "", err
 	}

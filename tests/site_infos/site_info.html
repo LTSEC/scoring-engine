@@ -1,6 +1,48 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aquarium - Home</title>
+    <link rel="stylesheet" href="css/home.css">
+</head>
 <body>
-<h1>Hello World</h1>
+    <header>
+        <nav>
+            <div class="container">
+                <h1 class="logo">Our Aquarium</h1>
+                <ul class="nav-links">
+                    <li><a href="home.html">Home</a></li>
+                    <li><a href="exhibits.html">Exhibits</a></li>
+                    <li><a href="events.html">Events</a></li>
+                </ul>
+            </div>
+        </nav>
+        <div class="hero">
+            <div class="container">
+                <h2>Discover the Wonders of the Ocean</h2>
+                <p>Explore a world of breathtaking sea creatures at Our Aquarium.</p>
+                <form action="search.php" method="GET">
+			<input type="hidden" id="type" name="type" value=2>
+                    <input type="text" id="search" name="search" placeholder="Search Sea Creatures, Try 'Snapper'">              
+                    <button type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </header>
+    <main>
+        <section class="about">
+            <div class="container">
+                <h2>About Our Aquarium</h2>
+                <p>Our Aquarium is dedicated to providing an immersive experience where visitors can learn about marine life and conservation efforts. With state-of-the-art exhibits and educational programs, we strive to inspire curiosity and appreciation for the ocean.</p>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Our Aquarium. All rights reserved.</p>
+        </div>
+    </footer>
 </body>
 </html>
+
