@@ -23,11 +23,14 @@ type Box struct {
 
 // Service struct represents each service configuration for a box
 type Service struct {
-	Username   string `yaml:"username,omitempty"`
-	Password   string `yaml:"password,omitempty"`
-	BtUsername string `yaml:"bt_username,omitempty"`
-	BtPassword string `yaml:"bt_password,omitempty"`
-	Port       int    `yaml:"port"`
+	Username    string `yaml:"username,omitempty"`
+	Password    string `yaml:"password,omitempty"`
+	BtUsername  string `yaml:"bt_username,omitempty"`
+	BtPassword  string `yaml:"bt_password,omitempty"`
+	Port        int    `yaml:"port"`
+	DBType      string `yaml:"bt_password,omitempty"`
+	DBName      string `yaml:"bt_password,omitempty"`
+	DBReference string `yaml:"bt_password,omitempty"`
 }
 
 // Team struct represents each team's configuration
