@@ -1,3 +1,5 @@
+-- This is for testing data mismatch (Bob Smith is renamed to Smith Bob)
+
 -- Drop tables if they exist
 DROP TABLE IF EXISTS Orders;
 DROP TABLE IF EXISTS Products;
@@ -32,7 +34,7 @@ CREATE TABLE Orders (
 -- Insert Customer data
 INSERT INTO Customers (customer_id, customer_name, email, join_date) VALUES
     (1, 'Alice Johnson', 'alice@example.com', '2024-01-01'),
-    (2, 'Bob Smith', 'bob@example.com', '2024-02-15'),
+    (2, 'Smith Bob', 'bob@example.com', '2024-02-15'),
     (3, 'Charlie Davis', 'charlie@example.com', '2024-03-10');
 
 -- Insert Product data
