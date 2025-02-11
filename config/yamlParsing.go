@@ -30,6 +30,7 @@ type Service struct {
 	DBName     string `yaml:"db_name,omitempty"`
 	DBPath     string `yaml:"db_path,omitempty"`
 	Port       int    `yaml:"port"`
+	QFile      string `yaml:"query_file,omitempty"`
 }
 
 // Team struct represents each team's configuration
