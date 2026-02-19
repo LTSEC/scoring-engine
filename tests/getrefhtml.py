@@ -25,8 +25,7 @@ def main():
     chrome_options = Options()
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--disable-gpu")
-    # If running as root in Docker, you may need:
-    # chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--no-sandbox")
 
     driver = webdriver.Chrome(
         service=Service(ChromeDriverManager().install()),
