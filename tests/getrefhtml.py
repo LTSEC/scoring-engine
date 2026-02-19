@@ -1,3 +1,4 @@
+import shutil
 import sys
 import time
 from selenium import webdriver
@@ -6,7 +7,6 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from webdriver_manager.chrome import ChromeDriverManager
 
 def main():
     if len(sys.argv) < 2:
@@ -28,10 +28,19 @@ def main():
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
 
-    driver = webdriver.Chrome(
-        service=Service(ChromeDriverManager().install()),
-        options=chrome_options
-    )
+    chromedriver_path = shutil.which("chromedriver")
+    if chromedriver_path:
+        driver = webdriver.Chrome(
+            service=Service(chromedriver_path),
+            options=chrome_options
+        )
+    else:
+        # Fall back to webdriver_manager if system chromedriver not found
+        from webdriver_manager.chrome import ChromeDriverManager
+        driver = webdriver.Chrome(
+            service=Service(ChromeDriverManager().install()),
+            options=chrome_options
+        )
 
     try:
         # Navigate to your React site at the given IP:port
