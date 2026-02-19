@@ -46,13 +46,11 @@ def main():
         # Navigate to your React site at the given IP:port
         driver.get(url)
 
-        # Wait for a known element (#root in many React apps)
+        # Wait for page body to load, then extra sleep for async rendering
         WebDriverWait(driver, 10).until(
-            EC.visibility_of_element_located((By.ID, "root"))
+            EC.presence_of_element_located((By.TAG_NAME, "body"))
         )
-
-        # Extra sleep if the page loads async data
-        time.sleep(2)
+        time.sleep(3)
 
         # Capture the final rendered HTML
         rendered_html = driver.page_source
