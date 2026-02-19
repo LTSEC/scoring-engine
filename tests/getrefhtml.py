@@ -1,3 +1,4 @@
+import shutil
 import sys
 import time
 from selenium import webdriver
@@ -6,7 +7,6 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from webdriver_manager.chrome import ChromeDriverManager
 
 def main():
     if len(sys.argv) < 2:
@@ -25,25 +25,32 @@ def main():
     chrome_options = Options()
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--disable-gpu")
-    # If running as root in Docker, you may need:
-    # chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
 
-    driver = webdriver.Chrome(
-        service=Service(ChromeDriverManager().install()),
-        options=chrome_options
-    )
+    chromedriver_path = shutil.which("chromedriver")
+    if chromedriver_path:
+        driver = webdriver.Chrome(
+            service=Service(chromedriver_path),
+            options=chrome_options
+        )
+    else:
+        # Fall back to webdriver_manager if system chromedriver not found
+        from webdriver_manager.chrome import ChromeDriverManager
+        driver = webdriver.Chrome(
+            service=Service(ChromeDriverManager().install()),
+            options=chrome_options
+        )
 
     try:
         # Navigate to your React site at the given IP:port
         driver.get(url)
 
-        # Wait for a known element (#root in many React apps)
+        # Wait for page body to load, then extra sleep for async rendering
         WebDriverWait(driver, 10).until(
-            EC.visibility_of_element_located((By.ID, "root"))
+            EC.presence_of_element_located((By.TAG_NAME, "body"))
         )
-
-        # Extra sleep if the page loads async data
-        time.sleep(2)
+        time.sleep(3)
 
         # Capture the final rendered HTML
         rendered_html = driver.page_source

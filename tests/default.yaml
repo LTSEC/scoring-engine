@@ -1,6 +1,6 @@
 boxes:
-  ncae-team0-web:
-    ip: 192.168.0.5
+  ncae-web:
+    ip: 192.168.t.5
     services:
       ssh:
         username: "root"
@@ -10,19 +10,10 @@ boxes:
         port: 22
       web:
         port: 80
-  ncae-team1-web:
-    ip: 192.168.1.5
-    services:
-      ssh:
-        username: "root"
-        password: "changeme"
-        bt_username: "blackteam"
-        bt_password: "G^H&J*K(LA@S#D$F%0987f"
-        port: 22
-      web:
-        port: 80
-  ncae-team0-db:
-    ip: 192.168.0.5
+      ftp:
+        port: 21
+  ncae-db:
+    ip: 192.168.t.5
     services:
       db:
         bt_username: "blackteam"
@@ -30,15 +21,31 @@ boxes:
         db_name: "MemeUsers"
         db_path: "tests/schemas/requests.sql"
         port: 3306
-  ncae-team1-db:
-    ip: 192.168.1.5
+  ncae-postgres:
+    ip: 192.168.t.10
     services:
-      db:
+      postgres:
         bt_username: "blackteam"
         bt_password: "G^H&J*K(LA@S#D$F%0987f"
-        db_name: "MemeUsers"
+        db_name: "scoring_data"
         db_path: "tests/schemas/requests.sql"
-        port: 3306
+        port: 5432
+  ncae-dns:
+    ip: 10.20.1.t
+    services:
+      dns_ext_fwd:
+        port: 53
+        query_file: "tests/dnsfiles/domains.txt"
+      dns_ext_rev:
+        port: 53
+        query_file: "tests/dnsfiles/domains.txt"
+      dns_int_fwd:
+        port: 53
+        query_file: "tests/dnsfiles/domains.txt"
+      dns_int_rev:
+        port: 53
+        query_file: "tests/dnsfiles/domains.txt"
+
 teams:
   team0:
     id: 0

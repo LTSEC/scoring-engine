@@ -4,7 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"io/ioutil"
+	"os"
 	"log"
 	"time"
 
@@ -62,7 +62,7 @@ func SetupSchema(cfg Config, schemaFilePath string) error {
 	defer db.Close()
 
 	// Read the schema SQL from file
-	schema, err := ioutil.ReadFile(schemaFilePath)
+	schema, err := os.ReadFile(schemaFilePath)
 	if err != nil {
 		return fmt.Errorf("failed to read schema file: %w", err)
 	}

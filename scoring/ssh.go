@@ -33,7 +33,6 @@ func ChooseRandomUser(dir string) (string, string, error) {
 	}
 
 	// Pick a random line
-	rand.Seed(time.Now().UnixNano()) // Seed RNG once; do it here or in init()
 	randomIndex := rand.Intn(len(validLines))
 	userLine := validLines[randomIndex]
 
