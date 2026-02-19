@@ -45,17 +45,10 @@ func DBconnect(address string, portNum int, username string, password string, DB
 }
 
 func DBverify(addr string, portNum int, username string, password string, DBName string, DBPath string) (bool, error) {
-	// Open the .sql file
-	file, err := os.Open(DBPath)
-	if err != nil {
-		return false, fmt.Errorf("Failed to open file $v\n", err)
-	}
-	defer file.Close()
-
 	// Read all lines from the file
 	content, err := os.ReadFile(DBPath)
 	if err != nil {
-		return false, fmt.Errorf("Failed to read file $v\n", err)
+		return false, fmt.Errorf("failed to read file: %v", err)
 	}
 
 	lines := strings.Split(string(content), "\n")
@@ -70,11 +63,10 @@ func DBverify(addr string, portNum int, username string, password string, DBName
 	}
 
 	if len(validLines) == 0 {
-		return false, fmt.Errorf("No valid SQL statements found in the file.")
+		return false, fmt.Errorf("no valid SQL statements found in the file")
 	}
 
 	// Pick a random line
-	rand.Seed(time.Now().UnixNano())
 	query := validLines[rand.Intn(len(validLines))]
 
 	// Create a connection string
@@ -83,8 +75,7 @@ func DBverify(addr string, portNum int, username string, password string, DBName
 	// Connect to the database
 	db, err := sql.Open("mysql", dsn)
 	if err != nil {
-		fmt.Printf("Failed to connect to database: %v\n", err)
-		return false, fmt.Errorf("Failed to connect to the database: %v\n", err)
+		return false, fmt.Errorf("failed to connect to the database: %v", err)
 	}
 	defer db.Close()
 
@@ -95,8 +86,7 @@ func DBverify(addr string, portNum int, username string, password string, DBName
 	// Execute the query
 	_, err = db.ExecContext(ctx, query)
 	if err != nil {
-		fmt.Printf("Failed to execute query: %v\n", err)
-		return false, fmt.Errorf("Failed to execute query: %v\n", err)
+		return false, fmt.Errorf("failed to execute query: %v", err)
 	}
 
 	return true, nil

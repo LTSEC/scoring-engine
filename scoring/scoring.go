@@ -93,8 +93,8 @@ func ScoringStartup(cfg database.Config, yamlConfig *config.Yaml) error {
 	for range ticker.C {
 		if ScoringOn {
 			rounds++
-			err := RunScoring(db, yamlConfig)
 			start_time := time.Now()
+			err := RunScoring(db, yamlConfig)
 			if err != nil {
 				fmt.Printf("Error running scoring: %v\n", err)
 			}
@@ -228,18 +228,11 @@ func RunScoring(db *sql.DB, yamlConfig *config.Yaml) error {
 				continue
 			}
 
-			// Pass relevant details including fourth_octet, but not the full IP address
-			// TODO: Update this interiorip stuff, since going through a router would cause issues
-			// FIX: i dont know
 			points, isUp, err := applyScoringFunction(
 				team.ID,
 				originalServiceName,
 				boxConfig.Ip,
-				serviceConfig.Port,
-				serviceConfig.BtUsername,
-				serviceConfig.BtPassword,
-				serviceConfig.DBName,
-				serviceConfig.DBPath,
+				serviceConfig,
 			)
 			if err != nil {
 				logger.LogMessage(fmt.Sprintf("Error scoring team %d for service %s: %v", team.ID, service.Name, err), "INFO")
@@ -302,7 +295,7 @@ func getTeamServices(db *sql.DB, teamID int) ([]Service, error) {
 }
 
 // Applies scoring of each service
-func applyScoringFunction(teamID int, serviceName string, baseIP string, port int, username string, password string, dbname string, dbpath string) (int, bool, error) {
+func applyScoringFunction(teamID int, serviceName string, baseIP string, svc config.Service) (int, bool, error) {
 	address, err := constructIPAddress(baseIP, teamID)
 	if err != nil {
 		return 0, false, fmt.Errorf("failed to construct IP address: %w", err)
@@ -311,14 +304,23 @@ func applyScoringFunction(teamID int, serviceName string, baseIP string, port in
 	// Apply the scoring function based on service type
 	switch serviceName {
 	case "ftp":
-		return ScoreFTP("/tests/ftpfiles", address, port, "tests/sshusers/users.txt")
+		return ScoreFTP("tests/ftpfiles", address, svc.Port, "tests/sshusers/users.txt")
 	case "web":
-		return ScoreWeb("/tests/site_infos/site_info.html", address, port)
+		return ScoreWeb("tests/site_infos/site_info.html", address, svc.Port)
 	case "ssh":
-		return ScoreSSH(address, port, "/tests/sshusers/users.txt")
+		return ScoreSSH(address, svc.Port, "tests/sshusers/users.txt")
 	case "db":
-		return ScoreDB(address, port, username, password, dbname, dbpath)
-	// Add cases for other services like web, dns, etc.
+		return ScoreDB(address, svc.Port, svc.BtUsername, svc.BtPassword, svc.DBName, svc.DBPath)
+	case "postgres":
+		return ScorePostgres(address, svc.Port, svc.BtUsername, svc.BtPassword, svc.DBName, svc.DBPath)
+	case "dns_ext_fwd":
+		return ScoreDNSExternalFwd(svc, address+fmt.Sprintf(":%d", svc.Port))
+	case "dns_ext_rev":
+		return ScoreDNSExternalRev(svc, address+fmt.Sprintf(":%d", svc.Port))
+	case "dns_int_fwd":
+		return ScoreDNSInternalFwd(svc, address+fmt.Sprintf(":%d", svc.Port))
+	case "dns_int_rev":
+		return ScoreDNSInternalRev(svc, address+fmt.Sprintf(":%d", svc.Port))
 	default:
 		return 0, false, fmt.Errorf("unknown service %s", serviceName)
 	}
@@ -425,10 +427,8 @@ func ToggleScoring() string {
 
 // Utility function to get the scoring engine's scoring status (on/off)
 func ScoringStatus() string {
-	ScoringOn = !ScoringOn
-	state := "off"
 	if ScoringOn {
-		state = "on"
+		return "on"
 	}
-	return state
+	return "off"
 }

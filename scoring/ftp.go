@@ -57,7 +57,6 @@ func ftpConnect(address string, portNum int, username string, password string) (
 	}
 
 	// Randomly pick one filename from our global ftpFiles map
-	rand.Seed(time.Now().UnixNano()) // seed RNG once per run; or do this in an init()
 	var fileNames []string
 	for name := range ftpFiles {
 		fileNames = append(fileNames, name)
